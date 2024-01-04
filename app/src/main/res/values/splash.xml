@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.QRCodeScanner.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_anim_splash</item>
+        <item name="postSplashScreenTheme">@style/Theme.QRCodeScanner</item>
+    </style>
+</resources>
