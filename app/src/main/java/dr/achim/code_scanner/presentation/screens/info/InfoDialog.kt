@@ -9,8 +9,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -29,13 +30,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -46,9 +50,25 @@ import dr.achim.code_scanner.R
 import dr.achim.code_scanner.common.DefaultPreview
 import dr.achim.code_scanner.common.Dimens
 import dr.achim.code_scanner.common.findActivity
+import dr.achim.code_scanner.presentation.components.DefaultAppBar
 import dr.achim.code_scanner.presentation.theme.AppTheme
 import dr.achim.code_scanner.presentation.theme.LocalSpacing
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import nl.dionsegijn.konfetti.compose.KonfettiView
+import nl.dionsegijn.konfetti.compose.OnParticleSystemUpdateListener
+import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.PartySystem
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.Rotation
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.core.models.Shape
+import nl.dionsegijn.konfetti.core.models.Size
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun InfoDialog(
@@ -59,27 +79,14 @@ fun InfoDialog(
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    LaunchedEffect(true) {
-        viewModel.eventsFlow.collectLatest {
-            when(it) {
-                PurchaseEvent.PurchaseComplete -> {
-                    // show in app review
-                    // show nice animation
-                }
-                PurchaseEvent.PurchaseAborted -> {
-                    // show snack bar error
-                }
-            }
-        }
-    }
-
     InfoDialogContent(
         onNavigateToLibraries = onNavigateToLibraries,
         isLoadingProducts = viewState.loading,
-        productList = viewState.productList,
-        onBuyProduct = {
-            viewState.onBuyProduct(context.findActivity(), it)
+        products = viewState.productList,
+        onPurchase = {
+            viewState.onPurchase(context.findActivity(), it)
         },
+        eventsFlow = viewModel.eventsFlow,
         onDismissRequest = onDismissRequest
     )
 }
@@ -88,102 +95,161 @@ fun InfoDialog(
 fun InfoDialogContent(
     onNavigateToLibraries: () -> Unit,
     isLoadingProducts: Boolean,
-    productList: List<StoreProduct>,
-    onBuyProduct: (product: StoreProduct) -> Unit,
+    products: List<StoreProduct>,
+    onPurchase: (product: StoreProduct) -> Unit,
+    eventsFlow: Flow<PurchaseEvent>,
     onDismissRequest: () -> Unit,
 ) {
 
     val context = LocalContext.current
+    var showConfetti by remember { mutableStateOf(false) }
 
-    Dialog(onDismissRequest = onDismissRequest) {
-        Surface(shape = RoundedCornerShape(Dimens.cornerSize)) {
-            Column(
-                modifier = Modifier.padding(LocalSpacing.current.s),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.xs)
-            ) {
+    LaunchedEffect(true) {
+        eventsFlow.collectLatest {
+            when (it) {
+                PurchaseEvent.PurchaseComplete -> {
+                    showConfetti = true
 
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier
-                            .padding(vertical = LocalSpacing.current.s)
-                            .align(Alignment.Center),
-                        text = "About the app",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-
-                    IconButton(
-                        modifier = Modifier.align(Alignment.TopEnd),
-                        onClick = onDismissRequest
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(28.dp),
-                            imageVector = Icons.Default.Close,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.tertiary,
-                        )
-                    }
+                    // show in app review
                 }
 
-                Divider(modifier = Modifier.padding(vertical = LocalSpacing.current.s))
-
-                Image(
-                    painter = painterResource(R.drawable.about_me),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(128.dp)
-                        .clip(CircleShape)
-                        .border(2.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
-                )
-
-                Text(
-                    modifier = Modifier
-                        .padding(
-                            horizontal = LocalSpacing.current.m,
-                            vertical = LocalSpacing.current.s
-                        ),
-                    text = "Behind the scenes - me and my purr-fect assistant Samira! " +
-                            "Her speciality: spontaneous keyboard walks \uD83D\uDC3E \n" +
-                            "If you like our work, consider supporting our coding adventures " +
-                            "donating a virtual treat or by rating the app ✨",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.secondary,
-                )
-
-                // products
-                AnimatedVisibility(visible = !isLoadingProducts) {
-                    productList.map {
-                        ListItem(
-                            modifier = Modifier.clickable { onBuyProduct(it) },
-                            headlineContent = { Text(it.title) },
-                            trailingContent = { Text(it.price.formatted) }
-                        )
-                    }
+                PurchaseEvent.PurchaseAborted -> {
+                    // show snack bar error
                 }
-
-                ListItem(
-                    modifier = Modifier.clickable {
-                        launchPlayStoreEntry(context)
-                    },
-                    headlineContent = { Text("Rate the app") },
-                    trailingContent = { Icon(Icons.Default.OpenInNew, null) }
-                )
-
-                Divider(modifier = Modifier.padding(vertical = LocalSpacing.current.s))
-
-                ListItem(
-                    modifier = Modifier.clickable {
-                        onNavigateToLibraries()
-                    },
-                    headlineContent = { Text("Libraries used") },
-                    trailingContent = { Icon(Icons.Default.ChevronRight, null) }
-                )
             }
         }
     }
+
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(shape = RoundedCornerShape(Dimens.cornerSize)) {
+            Box {
+                Column(
+                    modifier = Modifier.padding(LocalSpacing.current.s),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.xs)
+                ) {
+                    DefaultAppBar(title = R.string.screen_about, actions = {
+                        IconButton(onClick = onDismissRequest) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.label_close),
+                            )
+                        }
+                    })
+
+                    Divider(Modifier.padding(vertical = LocalSpacing.current.s))
+
+                    AboutProfile()
+
+                    StoreProductList(
+                        isLoading = isLoadingProducts,
+                        products = products,
+                        onPurchase = onPurchase
+                    )
+
+                    ListItem(
+                        modifier = Modifier.clickable {
+                            launchPlayStoreEntry(context)
+                        },
+                        headlineContent = { Text(stringResource(R.string.screen_about_rate_app)) },
+                        trailingContent = { Icon(Icons.Default.OpenInNew, null) }
+                    )
+
+                    Divider(modifier = Modifier.padding(vertical = LocalSpacing.current.s))
+
+                    ListItem(
+                        modifier = Modifier.clickable {
+                            onNavigateToLibraries()
+                            onDismissRequest()
+                        },
+                        headlineContent = { Text(stringResource(R.string.screen_about_libraries)) },
+                        trailingContent = { Icon(Icons.Default.ChevronRight, null) }
+                    )
+                }
+                if (showConfetti) {
+                    Confetti { showConfetti = false }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun BoxScope.Confetti(onAnimationCompleted: () -> Unit) {
+    KonfettiView(
+        modifier = Modifier.Companion
+            .matchParentSize()
+            .align(Alignment.BottomCenter),
+        parties = listOf(
+            Party(
+                speed = 30f,
+                maxSpeed = 50f,
+                damping = 0.9f,
+                angle = Angle.TOP,
+                spread = 45,
+                size = listOf(Size.SMALL, Size.LARGE, Size.LARGE),
+                shapes = listOf(Shape.Square, Shape.Circle),
+                timeToLive = 3000L,
+                rotation = Rotation(),
+                colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+                emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(30),
+                position = Position.Relative(0.5, 1.0)
+            )
+        ),
+        updateListener = object : OnParticleSystemUpdateListener {
+            override fun onParticleSystemEnded(
+                system: PartySystem,
+                activeSystems: Int,
+            ) {
+                if (activeSystems == 0) {
+                    onAnimationCompleted()
+                }
+            }
+        },
+    )
+}
+
+@Composable
+private fun ColumnScope.StoreProductList(
+    isLoading: Boolean,
+    products: List<StoreProduct>,
+    onPurchase: (product: StoreProduct) -> Unit
+) {
+    AnimatedVisibility(visible = !isLoading) {
+        products.map {
+            ListItem(
+                modifier = Modifier.clickable { onPurchase(it) },
+                headlineContent = {
+                    Text(it.title.replace(Regex("\\(.*?\\)"), ""))
+                },
+                trailingContent = { Text(it.price.formatted) }
+            )
+        }
+    }
+}
+
+@Composable
+private fun AboutProfile() {
+    Image(
+        painter = painterResource(R.drawable.about_me),
+        contentDescription = null,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier
+            .size(128.dp)
+            .clip(CircleShape)
+            .border(2.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+    )
+
+    Text(
+        modifier = Modifier
+            .padding(
+                horizontal = LocalSpacing.current.m,
+                vertical = LocalSpacing.current.s
+            ),
+        text = stringResource(R.string.screen_about_profile_description),
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.secondary,
+    )
 }
 
 private fun launchPlayStoreEntry(context: Context) {
@@ -199,12 +265,18 @@ private fun launchPlayStoreEntry(context: Context) {
 @DefaultPreview
 @Composable
 fun InfoScreenContentLoadedPreview() {
+
+    val purchaseFlow = Channel<PurchaseEvent>()
+
     AppTheme {
         InfoDialogContent(
             onNavigateToLibraries = {},
             isLoadingProducts = false,
-            productList = emptyList(),
-            onBuyProduct = {},
+            products = emptyList(),
+            onPurchase = {
+                purchaseFlow.trySend(PurchaseEvent.PurchaseComplete)
+            },
+            eventsFlow = purchaseFlow.receiveAsFlow(),
             onDismissRequest = {})
     }
 }
@@ -216,8 +288,9 @@ fun InfoScreenContentLoadedEmptyPreview() {
         InfoDialogContent(
             onNavigateToLibraries = {},
             isLoadingProducts = false,
-            productList = emptyList(),
-            onBuyProduct = {},
+            products = emptyList(),
+            onPurchase = {},
+            eventsFlow = emptyFlow(),
             onDismissRequest = {})
     }
 }
@@ -230,8 +303,9 @@ fun InfoScreenContentLoadingPreview() {
         InfoDialogContent(
             onNavigateToLibraries = {},
             isLoadingProducts = true,
-            productList = emptyList(),
-            onBuyProduct = {},
+            products = emptyList(),
+            onPurchase = {},
+            eventsFlow = emptyFlow(),
             onDismissRequest = {})
     }
 }

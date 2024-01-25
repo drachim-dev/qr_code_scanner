@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">QR Code Scanner</string>
     <string name="ad_mob_test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="button_scan">Scan</string>
+    <string name="button_scan_new">Scan new</string>
+    <string name="empty_title">Looks quite empty here.</string>
+    <string name="empty_description">Start now by scanning a code</string>
+    <string name="screen_about">About the app</string>
+    <string name="screen_about_profile_description">Behind the scenes - me and my purr-fect assistant Samira!\nHer speciality: spontaneous keyboard walks \uD83D\uDC3E\nIf you like our work, consider supporting our coding adventures by donating a virtual treat or by rating the app ✨"</string>
+    <string name="screen_about_rate_app">Rate the app</string>
+    <string name="screen_about_libraries">Libraries used</string>
+    <string name="screen_libraries">Libraries</string>
+    <string name="label_close">Close</string>
+    <string name="label_info">Info</string>
+    <string name="back_button">Back</string>
+    <string name="action_add_contact">Add contact</string>
+    <string name="action_call_number">Call number</string>
+    <string name="action_add_wifi">Add wifi</string>
+    <string name="action_copy_text">Copy text</string>
+    <string name="action_open_browser">Open browser</string>
+    <string name="action_copy_password">Copy password</string>
 </resources>

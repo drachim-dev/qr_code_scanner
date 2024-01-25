@@ -17,7 +17,8 @@ fun NavGraphBuilder.homeScreen(
     onClickAction: (ContentType.AssistAction) -> Unit,
     onScanResult: (ContentType) -> Unit,
     // Navigation events are exposed to the caller to be handled at a higher level
-    onNavigateToLibraries: () -> Unit
+    onNavigateToLibraries: () -> Unit,
+    currentScreen: Screen
 ) {
     composable(Screen.Home.route) {
         val viewModel: HomeViewModel = hiltViewModel()
@@ -26,11 +27,12 @@ fun NavGraphBuilder.homeScreen(
             viewState = viewState,
             onClickAction = onClickAction,
             onScanResult = onScanResult,
-            onNavigateToLibraries = onNavigateToLibraries
+            onNavigateToLibraries = onNavigateToLibraries,
+            currentScreen = currentScreen,
         )
     }
 }
 
 fun NavController.navigateToHome(navOptions: NavOptions? = null) {
-    this.navigate(Screen.Home.route, navOptions)
+    navigate(Screen.Home.route, navOptions)
 }

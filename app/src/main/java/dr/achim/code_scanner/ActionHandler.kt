@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
+import android.provider.ContactsContract
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
@@ -35,7 +36,8 @@ class ActionHandler(
     ): Boolean {
         val result = assistAction.run {
             when (this) {
-                is ContentType.AssistAction.Call -> openDialer(number)
+                is ContentType.AssistAction.AddContact -> addContactIntent(name, phoneNumber, email)
+                is ContentType.AssistAction.Call -> openDialer(phoneNumber)
                 is ContentType.AssistAction.Connect -> connectToWifi(wifiData)
                 is ContentType.AssistAction.Copy -> copyToClipboard(content)
                 is ContentType.AssistAction.LaunchUrl -> {
@@ -52,6 +54,31 @@ class ActionHandler(
         }
 
         return result
+    }
+
+    private fun addContactIntent(name: String?, phoneNumber: String?, email: String?): Boolean {
+        val intent = Intent(ContactsContract.Intents.Insert.ACTION).apply {
+            type = ContactsContract.RawContacts.CONTENT_TYPE
+
+            name?.let {
+                putExtra(ContactsContract.Intents.Insert.NAME, it)
+            }
+
+            phoneNumber?.let {
+                putExtra(ContactsContract.Intents.Insert.PHONE, it)
+            }
+
+            email?.let {
+                putExtra(ContactsContract.Intents.Insert.EMAIL, email)
+            }
+        }
+
+        return try {
+            activity.startActivity(intent)
+            true
+        } catch (e: ActivityNotFoundException) {
+            false
+        }
     }
 
     private fun connectToWifi(wifiData: Barcode.WiFi): Boolean {

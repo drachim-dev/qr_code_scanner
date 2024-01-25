@@ -20,7 +20,7 @@ android {
         applicationId = "dr.achim.code_scanner"
         minSdk = 30
         targetSdk = 34
-        versionCode = 2
+        versionCode = 3
         versionName = "0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -36,6 +36,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
@@ -62,11 +63,11 @@ dependencies {
     implementation(libs.android.play.review)
     implementation(libs.android.play.review.ktx)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.splashscreen)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.runtimeCompose)
+    implementation(libs.lifecycle.viewModelCompose)
     implementation(libs.billing.ktx)
     implementation(libs.browser)
     implementation(libs.lifecycle.runtime.ktx)
@@ -84,6 +85,7 @@ dependencies {
 
     // in-app purchases
     implementation(libs.revenuecat.purchases)
+    implementation(libs.konfetti.compose)
 
     // hilt
     implementation(libs.hilt.android)

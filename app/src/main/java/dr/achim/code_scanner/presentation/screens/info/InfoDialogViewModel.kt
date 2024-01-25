@@ -58,13 +58,12 @@ class InfoDialogViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun buyProduct(activity: Activity, product: StoreProduct) {
-
         Purchases.sharedInstance.purchase(
             PurchaseParams.Builder(activity, product).build(),
             object : PurchaseCallback {
                 override fun onError(error: PurchasesError, userCancelled: Boolean) {
                     Log.e(TAG, "Code ${error.code}: ${error.message}")
-                    sendEvent(PurchaseEvent.PurchaseComplete)
+                    sendEvent(PurchaseEvent.PurchaseAborted)
                 }
 
                 override fun onCompleted(

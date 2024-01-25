@@ -15,10 +15,6 @@ class HomeViewModel @Inject constructor(private val repo: MainRepo) : ViewModel(
     private val _viewState = MutableStateFlow(buildScanningState())
     val viewState = _viewState.asStateFlow()
 
-    init {
-        startScanning()
-    }
-
     private fun startScanning() {
         viewModelScope.launch {
             repo.startScanning().collect { contentType ->

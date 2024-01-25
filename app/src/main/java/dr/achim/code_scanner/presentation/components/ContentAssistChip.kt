@@ -10,6 +10,7 @@ import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import dr.achim.code_scanner.common.DefaultPreview
 import dr.achim.code_scanner.common.Dimens
@@ -32,7 +33,7 @@ fun ContentAssistChip(
         label = {
             Text(
                 modifier = Modifier.padding(vertical = LocalSpacing.current.m),
-                text = assistAction.label,
+                text = stringResource(id = assistAction.label),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyLarge,

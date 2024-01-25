@@ -1,11 +1,17 @@
 package dr.achim.code_scanner.presentation.screens
 
+import androidx.annotation.StringRes
+import dr.achim.code_scanner.R
+
 /* 
  * QR Code Scanner
  * 
  * Copyright © 2023 BEENIC GmbH. All rights reserved.
  */
-sealed class Screen(val route: String) {
-    data object Home : Screen("home_screen")
-    data object Libraries : Screen("libraries_screen")
+enum class Screen(@StringRes val title: Int) {
+    Home(R.string.app_name),
+    Libraries(R.string.screen_libraries),
+    ;
+
+    val route get() = name
 }
