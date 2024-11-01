@@ -11,17 +11,21 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 android {
     namespace = "dr.achim.code_scanner"
-    compileSdk = 34
+    compileSdk = 35
+
+    androidResources {
+        generateLocaleConfig = true
+    }
 
     defaultConfig {
         applicationId = "dr.achim.code_scanner"
         minSdk = 30
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 3
         versionName = "0.7"
 

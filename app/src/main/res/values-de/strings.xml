@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="access_icon_back">Zurück</string>
+    <string name="access_icon_camera">Kamera Icon</string>
+    <string name="access_icon_close">Schließen</string>
+    <string name="access_icon_edit_list">Liste bearbeiten</string>
+    <string name="access_icon_handshake">Handschlag Icon</string>
+    <string name="access_icon_info">Info</string>
+    <string name="access_icon_more_options">Mehr Optionen</string>
+    <string name="access_icon_trash">Mülleimer Icon</string>
+
+    <string name="action_add_contact">Kontakt hinzufügen</string>
+    <string name="action_add_wifi">Wlan hinzufügen</string>
+    <string name="action_call_number">Anrufen</string>
+    <string name="action_copy_password">Passwort kopieren</string>
+    <string name="action_copy_text">Text kopieren</string>
+    <string name="action_copy_success_toast_title">Kopiert</string>
+    <string name="clipboard_label_scanned_code">Kopierter Code</string>
+    <string name="action_open_browser">Im Browser öffnen</string>
+    <string name="action_open_chooser_title">Öffnen mit</string>
+    <string name="action_error_no_compatible_app_installed">Keine kompatible App installiert</string>
+
+    <string name="common_cancel">Abbrechen</string>
+    <string name="common_confirm">Bestätigen</string>
+    <string name="common_date_month_year">MMM yyyy</string>
+    <string name="common_date_time_short_suffix">Uhr</string>
+
+    <string name="screen_about_us">Über uns</string>
+    <string name="screen_about_us_profile_description">Hinter den Kulissen - ich und meine schnurrige Assistentin Samira!\nIhre Spezialität: spontane Tastaturspaziergänge \uD83D\uDC3E\nWenn Ihnen unsere Arbeit gefällt, sollten Sie unsere Programmierabenteuer unterstützen, indem Sie eine virtuelle Leckerei spenden oder die App bewerten ✨"</string>
+    <string name="screen_about_us_rate_app">Im Store bewerten (kostenlos)</string>
+
+    <string name="screen_home_empty_title">Es sieht hier ziemlich leer aus.</string>
+    <string name="screen_home_empty_description">Beginne jetzt mit dem Scannen eines Codes</string>
+    <string name="screen_home_menu_about">Über uns</string>
+    <string name="screen_home_menu_auto_start_camera">Starte im Kamera-Modus</string>
+    <string name="screen_home_button_scan">Scannen</string>
+    <string name="screen_home_button_scan_new">Neu scannen</string>
+    <string name="screen_home_menu_libraries">Bibliotheken</string>
+    <string name="screen_home_support_bubble_expanded_text">Meine Arbeit unterstützen?</string>
+
+    <string name="screen_history">Historie</string>
+    <string name="screen_history_clear_all">Historie löschen</string>
+    <string name="screen_history_confirm_deletion_title">Löschen bestätigen</string>
+    <string name="screen_history_confirm_deletion_description">Bist du sicher, dass du alle Einträge löschen möchtest?</string>
+    <string name="screen_history_items_selected">%1$s ausgewählt</string>
+
+    <string name="screen_libraries">Bibliotheken</string>
+
+    <string name="screen_onboarding">Willkommen!</string>
+    <string name="screen_onboarding_subtitle">Wähle deinen präferierten Startmodus</string>
+    <string name="screen_onboarding_launch_mode_auto_title">Automatisch</string>
+    <string name="screen_onboarding_launch_mode_manual_title">Manuell</string>
+    <string name="screen_onboarding_launch_mode_auto_text">Die App wird direkt im Scannen-Modus gestartet.</string>
+    <string name="screen_onboarding_launch_mode_manual_text">Der Scannen-Modus muss manuell über einen Button gestartet werden.</string>
+</resources>

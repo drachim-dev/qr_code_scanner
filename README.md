@@ -25,11 +25,11 @@ Everything is designed to be easy and pleasant to use.
 ## Screenshots
 
 <p float="left">
-  <img src="screenshots/home.png" width="260" />
-  <img src="screenshots/result_wifi.png" width="260" /> 
-  <img src="screenshots/result_url.png" width="260" /> 
-  <img src="screenshots/home_dark.png" width="260" />
-</p>[README.md](README.md)
+  <img src="screenshots/home.png" width="260" alt="home screen"/>
+  <img src="screenshots/result_wifi.png" width="260" alt="scanned wifi qr code"/> 
+  <img src="screenshots/result_url.png" width="260" alt="scanned url qr code"/> 
+  <img src="screenshots/home_dark.png" width="260" alt="home screen in dark theme"/>
+</p>
 
 ## Download
 

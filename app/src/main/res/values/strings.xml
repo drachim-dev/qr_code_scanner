@@ -1,22 +1,57 @@
 <resources>
-    <string name="app_name">QR Code Scanner</string>
-    <string name="ad_mob_test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="button_scan">Scan</string>
-    <string name="button_scan_new">Scan new</string>
-    <string name="empty_title">Looks quite empty here.</string>
-    <string name="empty_description">Start now by scanning a code</string>
-    <string name="screen_about">About the app</string>
-    <string name="screen_about_profile_description">Behind the scenes - me and my purr-fect assistant Samira!\nHer speciality: spontaneous keyboard walks \uD83D\uDC3E\nIf you like our work, consider supporting our coding adventures by donating a virtual treat or by rating the app ✨"</string>
-    <string name="screen_about_rate_app">Rate the app</string>
-    <string name="screen_about_libraries">Libraries used</string>
-    <string name="screen_libraries">Libraries</string>
-    <string name="label_close">Close</string>
-    <string name="label_info">Info</string>
-    <string name="back_button">Back</string>
+    <string name="app_name" translatable="false">QR Code Scanner</string>
+    <string name="ad_mob_test_banner_id" translatable="false">ca-app-pub-3940256099942544/6300978111</string>
+
+    <string name="access_icon_back">Back</string>
+    <string name="access_icon_camera">Camera icon</string>
+    <string name="access_icon_close">Close</string>
+    <string name="access_icon_edit_list">Edit list</string>
+    <string name="access_icon_handshake">Handshake icon</string>
+    <string name="access_icon_info">Info</string>
+    <string name="access_icon_more_options">More options</string>
+    <string name="access_icon_trash">Trash bin icon</string>
+
     <string name="action_add_contact">Add contact</string>
-    <string name="action_call_number">Call number</string>
     <string name="action_add_wifi">Add wifi</string>
-    <string name="action_copy_text">Copy text</string>
-    <string name="action_open_browser">Open browser</string>
+    <string name="action_call_number">Call number</string>
     <string name="action_copy_password">Copy password</string>
+    <string name="action_copy_text">Copy text</string>
+    <string name="action_copy_success_toast_title">Copied</string>
+    <string name="clipboard_label_scanned_code">scanned code</string>
+    <string name="action_open_browser">Open in browser</string>
+    <string name="action_open_chooser_title">Open with</string>
+    <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
+
+    <string name="common_cancel">Cancel</string>
+    <string name="common_confirm">Confirm</string>
+    <string name="common_date_month_year">MMM yyyy</string>
+    <string name="common_date_time_short_suffix"></string>
+
+    <string name="screen_about_us">About us</string>
+    <string name="screen_about_us_profile_description">Behind the scenes - me and my purr-fect assistant Samira!\nHer speciality: spontaneous keyboard walks \uD83D\uDC3E\nIf you like our work, consider supporting our coding adventures by donating a virtual treat or by rating the app ✨"</string>
+    <string name="screen_about_us_rate_app">Rate in Store (free)</string>
+
+    <string name="screen_home_empty_title">Looks quite empty here.</string>
+    <string name="screen_home_empty_description">Start now by scanning a code</string>
+    <string name="screen_home_menu_about">About us</string>
+    <string name="screen_home_menu_auto_start_camera">Start in camera mode</string>
+    <string name="screen_home_button_scan">Scan</string>
+    <string name="screen_home_button_scan_new">Scan new</string>
+    <string name="screen_home_menu_libraries">Libraries</string>
+    <string name="screen_home_support_bubble_expanded_text">Want to support me?</string>
+
+    <string name="screen_history">History</string>
+    <string name="screen_history_clear_all">Clear history</string>
+    <string name="screen_history_confirm_deletion_title">Confirm Deletion</string>
+    <string name="screen_history_confirm_deletion_description">Are you sure you want to delete all items?</string>
+    <string name="screen_history_items_selected">%1$s selected</string>
+
+    <string name="screen_libraries">Libraries</string>
+
+    <string name="screen_onboarding">Welcome!</string>
+    <string name="screen_onboarding_subtitle">Select your preferred launch mode</string>
+    <string name="screen_onboarding_launch_mode_auto_title">Automatic</string>
+    <string name="screen_onboarding_launch_mode_manual_title">Manual</string>
+    <string name="screen_onboarding_launch_mode_auto_text">App will launch in scan mode automatically.</string>
+    <string name="screen_onboarding_launch_mode_manual_text">You need to press a button to start scanning.</string>
 </resources>
