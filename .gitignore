@@ -38,3 +38,5 @@ gen-external-apklibs
 
 # Mac OS files
 **/.DS_Store
+
+*.salive
