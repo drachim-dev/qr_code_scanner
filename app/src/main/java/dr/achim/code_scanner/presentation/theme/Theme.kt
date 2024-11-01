@@ -13,6 +13,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -38,6 +39,8 @@ private val LightColorScheme = lightColorScheme(
 )
 
 internal val LocalSpacing = compositionLocalOf { Spacing() }
+internal val LocalTypography = staticCompositionLocalOf { Typography }
+internal val LocalShapes = staticCompositionLocalOf { Shapes }
 
 object AppTheme {
     /**
@@ -54,7 +57,7 @@ object AppTheme {
     val typography: Typography
         @Composable
         @ReadOnlyComposable
-        get() = MaterialTheme.typography
+        get() = LocalTypography.current
 
     /**
      * Retrieves the current [Shapes] at the call site's position in the hierarchy.
@@ -62,7 +65,7 @@ object AppTheme {
     val shapes: Shapes
         @Composable
         @ReadOnlyComposable
-        get() = MaterialTheme.shapes
+        get() = LocalShapes.current
 
     /**
      * Retrieves the current [Spacing] at the call site's position in the hierarchy.
@@ -92,6 +95,7 @@ fun AppTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
+        shapes = Shapes,
         typography = Typography,
         content = content
     )

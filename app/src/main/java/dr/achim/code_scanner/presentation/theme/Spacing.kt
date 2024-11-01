@@ -7,6 +7,7 @@ data class Spacing(
     val default: Dp = 0.dp,
     val xs: Dp = 4.dp,
     val s: Dp = 8.dp,
+    val sm: Dp = 12.dp,
     val m: Dp = 16.dp,
     val l: Dp = 32.dp,
     val xl: Dp = 64.dp,
