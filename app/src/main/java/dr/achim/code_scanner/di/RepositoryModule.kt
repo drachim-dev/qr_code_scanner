@@ -1,18 +1,36 @@
 package dr.achim.code_scanner.di
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
-import dr.achim.code_scanner.data.repo.MainRepoImpl
-import dr.achim.code_scanner.domain.repo.MainRepo
+import dagger.hilt.components.SingletonComponent
+import dr.achim.code_scanner.data.database.CodeDatabase
+import dr.achim.code_scanner.data.repo.CodeRepositoryImpl
+import dr.achim.code_scanner.data.repo.SettingsRepositoryImpl
+import dr.achim.code_scanner.data.source.ImageStreamSource
+import dr.achim.code_scanner.data.source.SettingsSource
+import dr.achim.code_scanner.domain.repo.CodeRepository
+import dr.achim.code_scanner.domain.repo.SettingsRepository
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
-abstract class RepositoryModule {
+@InstallIn(SingletonComponent::class)
+object RepositoryModule {
 
-    @Binds
-    @ViewModelScoped
-    abstract fun bindMainRepo(mainRepoImpl: MainRepoImpl): MainRepo
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        settingsSource: SettingsSource,
+    ): SettingsRepository {
+        return SettingsRepositoryImpl(settingsSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCodeRepository(
+        imageStreamSource: ImageStreamSource,
+        database: CodeDatabase
+    ): CodeRepository {
+        return CodeRepositoryImpl(imageStreamSource, database.dao)
+    }
 }

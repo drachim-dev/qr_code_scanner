@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.google.gms.plugin) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.secrets.gradle.plugin) apply false
+    kotlin("plugin.serialization").version(libs.versions.kotlin) apply false
 }

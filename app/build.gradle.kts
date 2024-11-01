@@ -4,8 +4,10 @@ plugins {
     alias(libs.plugins.google.gms.plugin)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.secrets.gradle.plugin)
+    kotlin("plugin.serialization").version(libs.versions.kotlin)
 }
 
 kotlin {
@@ -27,6 +29,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // https://developer.android.com/guide/topics/resources/app-languages#gradle-config
+        resourceConfigurations += listOf("en", "de")
     }
 
     buildTypes {
@@ -44,14 +49,16 @@ android {
         buildConfig = true
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.androidxComposeCompiler.get()
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
 }
 
 dependencies {
@@ -86,6 +93,14 @@ dependencies {
     // in-app purchases
     implementation(libs.revenuecat.purchases)
     implementation(libs.konfetti.compose)
+
+    // kotlinx serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
     // hilt
     implementation(libs.hilt.android)

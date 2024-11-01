@@ -15,11 +15,9 @@
 package dr.achim.code_scanner.service.customtab.internal
 
 import android.content.ComponentName
-
-import java.lang.ref.WeakReference
-
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsServiceConnection
+import java.lang.ref.WeakReference
 
 /**
  * Implementation for the CustomTabsServiceConnection that avoids leaking the
