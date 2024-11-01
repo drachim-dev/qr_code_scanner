@@ -1,16 +1,15 @@
 package dr.achim.code_scanner.service.customtab
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.RemoteException
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsCallback
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsServiceConnection
 import androidx.browser.customtabs.CustomTabsSession
-import androidx.browser.customtabs.EngagementSignalsCallback
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -25,7 +24,6 @@ import dr.achim.code_scanner.service.customtab.internal.ServiceConnectionCallbac
 class CustomTabHelper(
     private val context: Context,
     lifecycle: Lifecycle,
-    private val engagementSignalsCallback: EngagementSignalsCallback? = null,
     private val callback: CustomTabsCallback? = null,
 ) : ServiceConnectionCallback, DefaultLifecycleObserver {
 
@@ -42,28 +40,13 @@ class CustomTabHelper(
             if (client == null) {
                 customTabsSession = null
             } else if (field == null) {
-                customTabsSession = createSession()
+                customTabsSession = client?.newSession(callback)
             }
             return field
         }
 
     init {
         lifecycle.addObserver(this)
-    }
-
-    private fun createSession(): CustomTabsSession? {
-        val session = client?.newSession(callback)
-        return session?.apply {
-            engagementSignalsCallback?.let {
-                try {
-                    if (isEngagementSignalsApiAvailable(Bundle.EMPTY)) {
-                        setEngagementSignalsCallback(engagementSignalsCallback, Bundle.EMPTY)
-                    }
-                } catch (_: RemoteException) {
-                } catch (_: UnsupportedOperationException) {
-                }
-            }
-        }
     }
 
     override fun onPause(owner: LifecycleOwner) {
@@ -119,23 +102,23 @@ class CustomTabHelper(
         extras: Bundle? = null,
         otherLikelyBundles: List<Bundle>? = null
     ): Boolean {
-        Log.d(this::class.java.simpleName, "mayLaunchUrl called")
-
         return customTabsSession?.run {
             mayLaunchUrl(uri, extras, otherLikelyBundles)
         } ?: false
     }
 
-    fun launchUrl(uri: Uri): Boolean {
-
+    fun getLaunchUrlIntent(uri: Uri): Intent? {
         // Custom Tabs are not supported by any browser on the device
-        CustomTabsClient.getPackageName(context, emptyList())
-            ?: return false
+        val customTabsPackage = CustomTabsClient.getPackageName(context, emptyList())
+            ?: return null
 
-        CustomTabsIntent.Builder(customTabsSession)
+        // Build Custom Tabs Intent
+        val customTabsIntent = CustomTabsIntent.Builder(customTabsSession)
             .build()
-            .launchUrl(context, uri)
 
-        return true
+        customTabsIntent.intent.data = uri
+        customTabsIntent.intent.`package` = customTabsPackage
+
+        return customTabsIntent.intent
     }
 }
