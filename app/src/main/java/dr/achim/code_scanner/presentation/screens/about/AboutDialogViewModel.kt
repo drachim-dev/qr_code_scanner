@@ -1,4 +1,4 @@
-package dr.achim.code_scanner.presentation.screens.info
+package dr.achim.code_scanner.presentation.screens.about
 
 import android.app.Activity
 import android.util.Log
@@ -24,9 +24,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class InfoDialogViewModel @Inject constructor() : ViewModel() {
+class AboutDialogViewModel @Inject constructor() : ViewModel() {
 
-    private val _viewState = MutableStateFlow(InfoDialogState(true, emptyList(), ::buyProduct))
+    private val _viewState = MutableStateFlow(AboutDialogState(true, emptyList(), ::buyProduct))
     val viewState = _viewState.asStateFlow()
 
     private val eventChannel = Channel<PurchaseEvent>(Channel.BUFFERED)
@@ -54,7 +54,7 @@ class InfoDialogViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun updateProductList(products: List<StoreProduct>) {
-        _viewState.value = InfoDialogState(false, products, ::buyProduct)
+        _viewState.value = AboutDialogState(false, products, ::buyProduct)
     }
 
     private fun buyProduct(activity: Activity, product: StoreProduct) {

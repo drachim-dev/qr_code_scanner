@@ -1,4 +1,4 @@
-package dr.achim.code_scanner.presentation.screens.info
+package dr.achim.code_scanner.presentation.screens.about
 
 import android.content.Context
 import android.content.Intent
@@ -12,19 +12,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.OpenInNew
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,10 +50,9 @@ import com.revenuecat.purchases.models.StoreProduct
 import dr.achim.code_scanner.R
 import dr.achim.code_scanner.common.DefaultPreview
 import dr.achim.code_scanner.common.Dimens
+import dr.achim.code_scanner.common.DynamicPreview
 import dr.achim.code_scanner.common.findActivity
-import dr.achim.code_scanner.presentation.components.DefaultAppBar
 import dr.achim.code_scanner.presentation.theme.AppTheme
-import dr.achim.code_scanner.presentation.theme.LocalSpacing
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -71,16 +71,14 @@ import nl.dionsegijn.konfetti.core.models.Size
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun InfoDialog(
-    viewModel: InfoDialogViewModel = hiltViewModel(),
-    onNavigateToLibraries: () -> Unit,
+fun AboutDialog(
+    viewModel: AboutDialogViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    InfoDialogContent(
-        onNavigateToLibraries = onNavigateToLibraries,
+    AboutDialogContent(
         isLoadingProducts = viewState.loading,
         products = viewState.productList,
         onPurchase = {
@@ -92,8 +90,7 @@ fun InfoDialog(
 }
 
 @Composable
-fun InfoDialogContent(
-    onNavigateToLibraries: () -> Unit,
+fun AboutDialogContent(
     isLoadingProducts: Boolean,
     products: List<StoreProduct>,
     onPurchase: (product: StoreProduct) -> Unit,
@@ -124,22 +121,36 @@ fun InfoDialogContent(
         Surface(shape = RoundedCornerShape(Dimens.cornerSize)) {
             Box {
                 Column(
-                    modifier = Modifier.padding(LocalSpacing.current.s),
+                    modifier = Modifier.padding(AppTheme.spacing.s),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(LocalSpacing.current.xs)
+                    verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.xs)
                 ) {
-                    DefaultAppBar(title = R.string.screen_about, actions = {
-                        IconButton(onClick = onDismissRequest) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = stringResource(R.string.label_close),
-                            )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = AppTheme.spacing.l),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stringResource(id = R.string.screen_about_us),
+                            style = AppTheme.typography.titleLarge,
+                            color = AppTheme.colorScheme.primary
+                        )
+                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopEnd) {
+                            IconButton(onClick = onDismissRequest) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.access_icon_close),
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
                         }
-                    })
-
-                    Divider(Modifier.padding(vertical = LocalSpacing.current.s))
+                    }
 
                     AboutProfile()
+
+                    HorizontalDivider()
 
                     StoreProductList(
                         isLoading = isLoadingProducts,
@@ -148,22 +159,9 @@ fun InfoDialogContent(
                     )
 
                     ListItem(
-                        modifier = Modifier.clickable {
-                            launchPlayStoreEntry(context)
-                        },
-                        headlineContent = { Text(stringResource(R.string.screen_about_rate_app)) },
-                        trailingContent = { Icon(Icons.Default.OpenInNew, null) }
-                    )
-
-                    Divider(modifier = Modifier.padding(vertical = LocalSpacing.current.s))
-
-                    ListItem(
-                        modifier = Modifier.clickable {
-                            onNavigateToLibraries()
-                            onDismissRequest()
-                        },
-                        headlineContent = { Text(stringResource(R.string.screen_about_libraries)) },
-                        trailingContent = { Icon(Icons.Default.ChevronRight, null) }
+                        modifier = Modifier.clickable { launchPlayStoreEntry(context) },
+                        headlineContent = { Text(stringResource(R.string.screen_about_us_rate_app)) },
+                        trailingContent = { Icon(Icons.AutoMirrored.Default.OpenInNew, null) }
                     )
                 }
                 if (showConfetti) {
@@ -237,18 +235,18 @@ private fun AboutProfile() {
         modifier = Modifier
             .size(128.dp)
             .clip(CircleShape)
-            .border(2.dp, MaterialTheme.colorScheme.onBackground, CircleShape)
+            .border(2.dp, AppTheme.colorScheme.onBackground, CircleShape)
     )
 
     Text(
         modifier = Modifier
             .padding(
-                horizontal = LocalSpacing.current.m,
-                vertical = LocalSpacing.current.s
+                horizontal = AppTheme.spacing.m,
+                vertical = AppTheme.spacing.s
             ),
-        text = stringResource(R.string.screen_about_profile_description),
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.secondary,
+        text = stringResource(R.string.screen_about_us_profile_description),
+        style = AppTheme.typography.bodyMedium,
+        color = AppTheme.colorScheme.secondary,
     )
 }
 
@@ -262,15 +260,14 @@ private fun launchPlayStoreEntry(context: Context) {
     context.startActivity(intent)
 }
 
+@DynamicPreview
 @DefaultPreview
 @Composable
-fun InfoScreenContentLoadedPreview() {
-
+private fun ContentLoadedPreview() {
     val purchaseFlow = Channel<PurchaseEvent>()
 
     AppTheme {
-        InfoDialogContent(
-            onNavigateToLibraries = {},
+        AboutDialogContent(
             isLoadingProducts = false,
             products = emptyList(),
             onPurchase = {
@@ -283,10 +280,9 @@ fun InfoScreenContentLoadedPreview() {
 
 @Preview
 @Composable
-fun InfoScreenContentLoadedEmptyPreview() {
+private fun ContentLoadedEmptyPreview() {
     AppTheme {
-        InfoDialogContent(
-            onNavigateToLibraries = {},
+        AboutDialogContent(
             isLoadingProducts = false,
             products = emptyList(),
             onPurchase = {},
@@ -298,10 +294,9 @@ fun InfoScreenContentLoadedEmptyPreview() {
 
 @Preview
 @Composable
-fun InfoScreenContentLoadingPreview() {
+private fun ContentLoadingPreview() {
     AppTheme {
-        InfoDialogContent(
-            onNavigateToLibraries = {},
+        AboutDialogContent(
             isLoadingProducts = true,
             products = emptyList(),
             onPurchase = {},
