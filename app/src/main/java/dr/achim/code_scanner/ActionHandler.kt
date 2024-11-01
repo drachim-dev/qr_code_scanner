@@ -5,59 +5,78 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.provider.ContactsContract
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import com.google.mlkit.vision.barcode.common.Barcode
-import dr.achim.code_scanner.common.TAG
-import dr.achim.code_scanner.domain.model.ContentType
+import dr.achim.code_scanner.domain.model.AssistAction
 import dr.achim.code_scanner.service.customtab.CustomTabHelper
-import kotlin.reflect.KProperty
 
 class ActionHandler(
-    private val activity: ComponentActivity,
+    private val context: ComponentActivity,
     private val resultLauncher: ActivityResultLauncher<Intent>
 ) {
 
-    operator fun getValue(mainActivity: MainActivity, property: KProperty<*>): ActionHandler {
-        return ActionHandler(activity, resultLauncher)
-    }
-
     fun handleAction(
         customTabHelper: CustomTabHelper,
-        assistAction: ContentType.AssistAction,
-        onCompleted: () -> Unit,
+        assistAction: AssistAction
     ): Boolean {
-        val result = assistAction.run {
+        var success = false
+        val intent = assistAction.run {
             when (this) {
-                is ContentType.AssistAction.AddContact -> addContactIntent(name, phoneNumber, email)
-                is ContentType.AssistAction.Call -> openDialer(phoneNumber)
-                is ContentType.AssistAction.Connect -> connectToWifi(wifiData)
-                is ContentType.AssistAction.Copy -> copyToClipboard(content)
-                is ContentType.AssistAction.LaunchUrl -> {
-                    // If action is successful, the activity is in background
-                    // and we should not show review until resumed
-                    customTabHelper.launchUrl(uri)
+                is AssistAction.AddContact -> getAddContactIntent(name, phoneNumber, email)
+                is AssistAction.Call -> getDialIntent(phoneNumber)
+                is AssistAction.Connect -> getWifiIntent(ssid, password ?: "", encryptionType)
+                is AssistAction.Copy -> {
+                    copyToClipboard(content)
+                    success = true
+                    null
+                }
+
+                is AssistAction.LaunchUrl -> {
+                    getAppIntent(uri) ?: customTabHelper.getLaunchUrlIntent(uri)
                 }
             }
         }
 
-        if (result) {
-            Log.d(TAG, "handleAction complete")
-            onCompleted()
+        intent?.let {
+            try {
+                resultLauncher.launch(it)
+                success = true
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.action_error_no_compatible_app_installed),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
 
-        return result
+        return success
     }
 
-    private fun addContactIntent(name: String?, phoneNumber: String?, email: String?): Boolean {
-        val intent = Intent(ContactsContract.Intents.Insert.ACTION).apply {
+    /**
+     * Creates an intent to open the given URI and handles app selection.
+     * @return the intent if a suitable activity is found, otherwise null.
+     */
+    private fun getAppIntent(uri: Uri): Intent? {
+        // handle app links for installed apps
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        val pm = context.packageManager
+
+        return if (pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+            Intent.createChooser(intent, context.getString(R.string.action_open_chooser_title))
+        } else null
+    }
+
+    private fun getAddContactIntent(name: String?, phoneNumber: String?, email: String?): Intent {
+        return Intent(ContactsContract.Intents.Insert.ACTION).apply {
             type = ContactsContract.RawContacts.CONTENT_TYPE
 
             name?.let {
@@ -72,22 +91,12 @@ class ActionHandler(
                 putExtra(ContactsContract.Intents.Insert.EMAIL, email)
             }
         }
-
-        return try {
-            activity.startActivity(intent)
-            true
-        } catch (e: ActivityNotFoundException) {
-            false
-        }
     }
 
-    private fun connectToWifi(wifiData: Barcode.WiFi): Boolean {
-
-        val ssid = wifiData.ssid ?: return false
-        val password = wifiData.password ?: ""
+    private fun getWifiIntent(ssid: String, password: String, encryptionType: Int?): Intent? {
 
         val networkSuggestions = buildList {
-            when (wifiData.encryptionType) {
+            when (encryptionType) {
                 Barcode.WiFi.TYPE_WPA -> {
                     WifiNetworkSuggestion.Builder()
                         .setSsid(ssid)
@@ -114,48 +123,32 @@ class ActionHandler(
         }
 
         if (networkSuggestions.isEmpty()) {
-            return false
+            return null
         }
 
-        val intent = Intent(Settings.ACTION_WIFI_ADD_NETWORKS).apply {
+        return Intent(Settings.ACTION_WIFI_ADD_NETWORKS).apply {
             putParcelableArrayListExtra(
                 Settings.EXTRA_WIFI_NETWORK_LIST,
                 ArrayList(networkSuggestions)
             )
         }
-
-        return try {
-            resultLauncher.launch(intent)
-            true
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(activity, "Could not save wifi", Toast.LENGTH_LONG).show()
-            false
-        }
     }
 
-    private fun openDialer(phoneNumber: String): Boolean {
+    private fun getDialIntent(phoneNumber: String): Intent {
         val uri = Uri.parse("tel:$phoneNumber")
-        val intent = Intent(Intent.ACTION_DIAL, uri)
-
-        return try {
-            activity.startActivity(intent)
-            true
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(activity, "Could not open dialer", Toast.LENGTH_LONG).show()
-            false
-        }
+        return Intent(Intent.ACTION_DIAL, uri)
     }
 
-    private fun copyToClipboard(text: String): Boolean {
-        val clipboardManager =
-            activity.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("scanned code", text)
-        clipboardManager.setPrimaryClip(clip)
+    private fun copyToClipboard(text: String) {
+        val manager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val label = context.getString(R.string.clipboard_label_scanned_code)
+        val clip = ClipData.newPlainText(label, text)
+        manager.setPrimaryClip(clip)
 
         // Only show a toast for Android 12 and lower.
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2)
-            Toast.makeText(activity, "Copied", Toast.LENGTH_SHORT).show()
-
-        return true
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+            val message = context.getString(R.string.action_copy_success_toast_title)
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }
