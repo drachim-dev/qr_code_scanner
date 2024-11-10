@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.aboutlibraries.plugin)
     alias(libs.plugins.android.application)
@@ -34,8 +37,49 @@ android {
             useSupportLibrary = true
         }
 
+        val revenueCatKey = if (System.getenv("REVENUECAT_KEY") != null) {
+            System.getenv("REVENUECAT_KEY")
+        } else {
+            val localProperties = Properties().apply {
+                val localPropertiesFile = rootProject.file("local.properties")
+                if (localPropertiesFile.exists()) {
+                    load(FileInputStream(localPropertiesFile))
+                } else {
+                    println("Warning: local.properties file not found")
+                }
+            }
+            localProperties.getProperty("REVENUECAT_KEY", "")
+        }
+        buildConfigField("String", "REVENUECAT_KEY", "\"${revenueCatKey}\"")
+
         // https://developer.android.com/guide/topics/resources/app-languages#gradle-config
         resourceConfigurations += listOf("en", "de")
+    }
+
+    signingConfigs {
+        create("release") {
+            // CI=true is exported by Codemagic
+            if (System.getenv("CI") == "true") {
+                storeFile = file(System.getenv("CM_KEYSTORE_PATH"))
+                storePassword = System.getenv("CM_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("CM_KEY_ALIAS")
+                keyPassword = System.getenv("CM_KEY_PASSWORD")
+            } else {
+                val keystoreProperties = Properties().apply {
+                    val keystoreFile = rootProject.file("keystore.properties")
+                    if (keystoreFile.exists()) {
+                        load(FileInputStream(keystoreFile))
+                    } else {
+                        println("Warning: keystore.properties file not found")
+                    }
+                }
+
+                keyAlias = keystoreProperties["keyAlias"] as String?
+                keyPassword = keystoreProperties["keyPassword"] as String?
+                storeFile = keystoreProperties["storeFile"]?.let { file(it as String) }
+                storePassword = keystoreProperties["storePassword"] as String?
+            }
+        }
     }
 
     buildTypes {
@@ -45,7 +89,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -66,7 +110,6 @@ ksp {
 }
 
 dependencies {
-
     implementation(platform(libs.compose.bom))
     implementation(libs.activity.compose)
     implementation(libs.aboutlibraries.core)
