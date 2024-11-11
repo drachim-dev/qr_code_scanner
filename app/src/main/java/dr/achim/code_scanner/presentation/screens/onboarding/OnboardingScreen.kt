@@ -2,8 +2,6 @@ package dr.achim.code_scanner.presentation.screens.onboarding
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,14 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ElevatedCard
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,10 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import dr.achim.code_scanner.R
 import dr.achim.code_scanner.common.DefaultPreview
+import dr.achim.code_scanner.common.Dimens
 import dr.achim.code_scanner.common.DynamicPreview
-import dr.achim.code_scanner.presentation.components.EmptyView
+import dr.achim.code_scanner.presentation.components.CheckCard
 import dr.achim.code_scanner.presentation.screens.Screen
 import dr.achim.code_scanner.presentation.theme.AppTheme
 
@@ -66,7 +65,7 @@ fun OnboardingScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(top = AppTheme.spacing.m)
             ) {
-                EmptyView(
+                OnboardingHeader(
                     title = currentScreen.title,
                     description = stringResource(R.string.screen_onboarding_subtitle)
                 )
@@ -110,46 +109,38 @@ fun OnboardingScreen(
 }
 
 @Composable
-fun CheckCard(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(AppTheme.spacing.m),
-    title: @Composable () -> Unit = {},
-    description: @Composable () -> Unit = {},
-    checked: Boolean = false,
-    onClick: () -> Unit,
-) {
-    val decoratedTitle = @Composable {
-        CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.labelLarge) {
-            title()
-        }
-    }
-
-    val decoratedDescription = @Composable {
-        CompositionLocalProvider(LocalTextStyle provides AppTheme.typography.bodyLarge) {
-            description()
-        }
-    }
-
-    ElevatedCard(
-        modifier = modifier,
-        onClick = onClick,
+fun OnboardingHeader(title: String, description: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(
+            AppTheme.spacing.m,
+            Alignment.CenterVertically
+        ),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.s),
-            modifier = Modifier.padding(contentPadding)
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                decoratedTitle()
-                Spacer(modifier = Modifier.height(AppTheme.spacing.m))
-                decoratedDescription()
-            }
+        Icon(
+            imageVector = Icons.Default.CameraAlt,
+            contentDescription = null,
+            modifier = Modifier
+                .height(Dimens.contentImageSize)
+                .fillMaxWidth(),
+            tint = AppTheme.colorScheme.surfaceVariant
+        )
 
-            RadioButton(
-                selected = checked,
-                onClick = onClick
-            )
-        }
+        Text(
+            text = title,
+            textAlign = TextAlign.Center,
+            modifier = Modifier,
+            style = AppTheme.typography.titleLarge,
+            color = AppTheme.colorScheme.secondary,
+        )
+
+        Text(
+            text = description,
+            textAlign = TextAlign.Center,
+            modifier = Modifier,
+            style = AppTheme.typography.bodyLarge,
+            color = AppTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
