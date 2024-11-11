@@ -29,7 +29,7 @@ android {
         applicationId = "dr.achim.code_scanner"
         minSdk = 30
         targetSdk = 35
-        versionCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: -1
+        versionCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
