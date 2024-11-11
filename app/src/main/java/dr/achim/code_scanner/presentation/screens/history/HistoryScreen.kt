@@ -18,6 +18,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Coffee
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.ExpandMore
@@ -58,6 +59,7 @@ import dr.achim.code_scanner.common.formatWith
 import dr.achim.code_scanner.domain.model.AssistAction
 import dr.achim.code_scanner.domain.model.Code
 import dr.achim.code_scanner.presentation.components.AnimatedRotationContainer
+import dr.achim.code_scanner.presentation.components.EmptyView
 import dr.achim.code_scanner.presentation.components.appbar.DefaultAppBar
 import dr.achim.code_scanner.presentation.components.appbar.NavigateUpButton
 import dr.achim.code_scanner.presentation.navigation.NavigateUp
@@ -129,22 +131,30 @@ fun HistoryScreen(
                 is HistoryScreenState.Error -> Text("Error")
                 is HistoryScreenState.Loading -> CircularProgressIndicator()
                 is HistoryScreenState.Success -> {
-                    HistoryScreenContent(
-                        categories = viewState.categories,
-                        selectedItems = selectedItems,
-                        selectionMode = selectionMode,
-                        addItem = {
-                            selectedItems.add(it)
-                            onChangeSelectionMode(true)
-                        },
-                        removeItem = {
-                            selectedItems.remove(it)
-                            if (selectedItems.isEmpty()) {
-                                onChangeSelectionMode(false)
-                            }
-                        },
-                        onClickAction = onClickAction
-                    )
+                    if (viewState.categories.isEmpty()) {
+                        EmptyView(
+                            title = stringResource(R.string.empty_screen_title),
+                            description = stringResource(R.string.empty_screen_description),
+                            icon = Icons.Default.Coffee
+                        )
+                    } else {
+                        HistoryScreenContent(
+                            categories = viewState.categories,
+                            selectedItems = selectedItems,
+                            selectionMode = selectionMode,
+                            addItem = {
+                                selectedItems.add(it)
+                                onChangeSelectionMode(true)
+                            },
+                            removeItem = {
+                                selectedItems.remove(it)
+                                if (selectedItems.isEmpty()) {
+                                    onChangeSelectionMode(false)
+                                }
+                            },
+                            onClickAction = onClickAction
+                        )
+                    }
                 }
             }
         }
