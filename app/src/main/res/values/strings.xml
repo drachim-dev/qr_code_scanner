@@ -22,6 +22,9 @@
     <string name="action_open_chooser_title">Open with</string>
     <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
 
+    <string name="empty_screen_title">Looks quite empty here.</string>
+    <string name="empty_screen_description">Start now by scanning a code</string>
+
     <string name="common_cancel">Cancel</string>
     <string name="common_confirm">Confirm</string>
     <string name="common_date_month_year">MMM yyyy</string>
@@ -31,8 +34,6 @@
     <string name="screen_about_us_profile_description">Behind the scenes - me and my purr-fect assistant Samira!\nHer speciality: spontaneous keyboard walks \uD83D\uDC3E\nIf you like our work, consider supporting our coding adventures by donating a virtual treat or by rating the app ✨"</string>
     <string name="screen_about_us_rate_app">Rate in Store (free)</string>
 
-    <string name="screen_home_empty_title">Looks quite empty here.</string>
-    <string name="screen_home_empty_description">Start now by scanning a code</string>
     <string name="screen_home_menu_about">About us</string>
     <string name="screen_home_menu_auto_start_camera">Start in camera mode</string>
     <string name="screen_home_button_scan">Scan</string>

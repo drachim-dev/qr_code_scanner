@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Handshake
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MoreVert
@@ -134,8 +135,9 @@ fun HomeScreen(
                 toggleTextSelection = toggleTextSelection,
                 placeholder = {
                     EmptyView(
-                        title = stringResource(id = R.string.screen_home_empty_title),
-                        description = stringResource(id = R.string.screen_home_empty_description),
+                        title = stringResource(id = R.string.empty_screen_title),
+                        description = stringResource(id = R.string.empty_screen_description),
+                        icon = Icons.Default.CameraAlt
                     )
                 },
                 onClickAction = onClickAction,

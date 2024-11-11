@@ -29,8 +29,8 @@
     <string name="screen_about_us_profile_description">Hinter den Kulissen - ich und meine schnurrige Assistentin Samira!\nIhre Spezialität: spontane Tastaturspaziergänge \uD83D\uDC3E\nWenn Ihnen unsere Arbeit gefällt, sollten Sie unsere Programmierabenteuer unterstützen, indem Sie eine virtuelle Leckerei spenden oder die App bewerten ✨"</string>
     <string name="screen_about_us_rate_app">Im Store bewerten (kostenlos)</string>
 
-    <string name="screen_home_empty_title">Es sieht hier ziemlich leer aus.</string>
-    <string name="screen_home_empty_description">Beginne jetzt mit dem Scannen eines Codes</string>
+    <string name="empty_screen_title">Es sieht hier ziemlich leer aus.</string>
+    <string name="empty_screen_description">Beginne jetzt mit dem Scannen eines Codes</string>
     <string name="screen_home_menu_about">Über uns</string>
     <string name="screen_home_menu_auto_start_camera">Starte im Kamera-Modus</string>
     <string name="screen_home_button_scan">Scannen</string>

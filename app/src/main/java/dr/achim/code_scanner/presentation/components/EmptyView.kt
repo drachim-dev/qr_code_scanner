@@ -12,14 +12,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import dr.achim.code_scanner.common.DefaultPreview
 import dr.achim.code_scanner.common.Dimens
 import dr.achim.code_scanner.presentation.theme.AppTheme
 
 @Composable
-fun EmptyView(modifier: Modifier = Modifier, title: String, description: String) {
-
+fun EmptyView(
+    modifier: Modifier = Modifier,
+    title: String,
+    description: String,
+    icon: ImageVector
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -29,7 +34,7 @@ fun EmptyView(modifier: Modifier = Modifier, title: String, description: String)
         ),
     ) {
         Icon(
-            imageVector = Icons.Default.CameraAlt,
+            imageVector = icon,
             contentDescription = null,
             modifier = Modifier
                 .height(Dimens.contentImageSize)
@@ -59,6 +64,6 @@ fun EmptyView(modifier: Modifier = Modifier, title: String, description: String)
 @Composable
 private fun Preview() {
     AppTheme {
-        EmptyView(title = "title", description = "description")
+        EmptyView(title = "title", description = "description", icon = Icons.Default.CameraAlt)
     }
 }
