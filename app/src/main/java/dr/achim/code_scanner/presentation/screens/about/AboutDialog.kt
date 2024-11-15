@@ -214,14 +214,16 @@ private fun ColumnScope.StoreProductList(
     onPurchase: (product: StoreProduct) -> Unit
 ) {
     AnimatedVisibility(visible = !isLoading) {
-        products.map {
-            ListItem(
-                modifier = Modifier.clickable { onPurchase(it) },
-                headlineContent = {
-                    Text(it.title.replace(Regex("\\(.*?\\)"), ""))
-                },
-                trailingContent = { Text(it.price.formatted) }
-            )
+        Column {
+            products.map {
+                ListItem(
+                    modifier = Modifier.clickable { onPurchase(it) },
+                    headlineContent = {
+                        Text(it.title.replace(Regex("\\(.*?\\)"), ""))
+                    },
+                    trailingContent = { Text(it.price.formatted) }
+                )
+            }
         }
     }
 }
