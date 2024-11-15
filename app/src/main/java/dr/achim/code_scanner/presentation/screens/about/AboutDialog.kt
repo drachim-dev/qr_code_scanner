@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,6 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -123,32 +122,31 @@ fun AboutDialogContent(
                 Column(
                     modifier = Modifier.padding(AppTheme.spacing.s),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.xs)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = AppTheme.spacing.l),
-                        verticalAlignment = Alignment.Bottom
-                    ) {
-                        Spacer(modifier = Modifier.weight(1f))
-                        Text(
-                            text = stringResource(id = R.string.screen_about_us),
-                            style = AppTheme.typography.titleLarge,
-                            color = AppTheme.colorScheme.primary
-                        )
-                        Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.TopEnd) {
-                            IconButton(onClick = onDismissRequest) {
-                                Icon(
-                                    imageVector = Icons.Default.Close,
-                                    contentDescription = stringResource(R.string.access_icon_close),
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        IconButton(
+                            onClick = onDismissRequest,
+                            modifier = Modifier.align(Alignment.TopEnd)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = stringResource(R.string.access_icon_close),
+                                modifier = Modifier.size(32.dp)
+                            )
                         }
+
+                        AboutProfile()
                     }
 
-                    AboutProfile()
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = AppTheme.spacing.m)
+                            .padding(top = AppTheme.spacing.l, bottom = AppTheme.spacing.m),
+                        text = stringResource(R.string.screen_about_us_support_description),
+                        style = AppTheme.typography.titleSmall,
+                        color = AppTheme.colorScheme.primary,
+                    )
 
                     HorizontalDivider()
 
@@ -230,26 +228,33 @@ private fun ColumnScope.StoreProductList(
 
 @Composable
 private fun AboutProfile() {
-    Image(
-        painter = painterResource(R.drawable.about_me),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .size(128.dp)
-            .clip(CircleShape)
-            .border(2.dp, AppTheme.colorScheme.onBackground, CircleShape)
-    )
+    Column(
+        modifier = Modifier.padding(top = AppTheme.spacing.m),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.xs)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.cats_programming),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(156.dp)
+                .clip(CircleShape)
+                .border(2.dp, AppTheme.colorScheme.onBackground, CircleShape)
+        )
 
-    Text(
-        modifier = Modifier
-            .padding(
-                horizontal = AppTheme.spacing.m,
-                vertical = AppTheme.spacing.s
-            ),
-        text = stringResource(R.string.screen_about_us_profile_description),
-        style = AppTheme.typography.bodyMedium,
-        color = AppTheme.colorScheme.secondary,
-    )
+        Text(
+            modifier = Modifier
+                .padding(
+                    horizontal = AppTheme.spacing.m,
+                    vertical = AppTheme.spacing.s
+                ),
+            textAlign = TextAlign.Center,
+            text = stringResource(R.string.screen_about_us_profile_description),
+            style = AppTheme.typography.bodyMedium,
+            color = AppTheme.colorScheme.secondary,
+        )
+    }
 }
 
 private fun launchPlayStoreEntry(context: Context) {

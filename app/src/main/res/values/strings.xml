@@ -28,10 +28,11 @@
     <string name="common_cancel">Cancel</string>
     <string name="common_confirm">Confirm</string>
     <string name="common_date_month_year">MMM yyyy</string>
-    <string name="common_date_time_short_suffix"></string>
+    <string name="common_date_time_short_suffix" />
 
     <string name="screen_about_us">About us</string>
-    <string name="screen_about_us_profile_description">Behind the scenes - me and my purr-fect assistant Samira!\nHer speciality: spontaneous keyboard walks \uD83D\uDC3E\nIf you like our work, consider supporting our coding adventures by donating a virtual treat or by rating the app ✨"</string>
+    <string name="screen_about_us_profile_description">Behind the scenes - my purr-fect assistants June and Samira!\nTheir speciality: spontaneous keyboard walks \uD83D\uDC3E"</string>
+    <string name="screen_about_us_support_description">Support our work"</string>
     <string name="screen_about_us_rate_app">Rate in Store (free)</string>
 
     <string name="screen_home_menu_about">About us</string>
