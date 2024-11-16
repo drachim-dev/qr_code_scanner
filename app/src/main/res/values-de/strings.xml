@@ -26,9 +26,9 @@
     <string name="common_date_time_short_suffix">Uhr</string>
 
     <string name="screen_about_us">Über uns</string>
-    <string name="screen_about_us_profile_description">Hinter den Kulissen - meine flauschigen Assistentinnen June und Samira!\nIhre Spezialität: spontane Tastaturspaziergänge \uD83D\uDC3E\nWenn Ihnen unsere Arbeit gefällt, sollten Sie unsere Programmierabenteuer unterstützen, indem Sie eine virtuelle Leckerei spenden oder die App bewerten ✨"</string>
+    <string name="screen_about_us_profile_description">Hinter den Kulissen - meine flauschigen Assistentinnen, June und Samira!\n\nSpezialgebiet:\nSpontane Tastaturspaziergänge \uD83D\uDC3E"</string>
     <string name="screen_about_us_support_description">Unterstütze unsere Arbeit"</string>
-    <string name="screen_about_us_rate_app">Im Store bewerten (kostenlos)</string>
+    <string name="screen_about_us_rate_app">App bewerten (kostenlos)</string>
 
     <string name="empty_screen_title">Es sieht hier ziemlich leer aus.</string>
     <string name="empty_screen_description">Beginne jetzt mit dem Scannen eines Codes</string>
