@@ -13,6 +13,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -248,7 +249,6 @@ private fun ScannedContent(
 ) {
     AnimatedContent(
         targetState = code,
-        modifier = Modifier.padding(AppTheme.spacing.m),
         label = "",
         transitionSpec = { fadeIn().togetherWith(fadeOut()) }
     ) { targetState ->
@@ -259,6 +259,7 @@ private fun ScannedContent(
             ContentContainer(
                 code = targetState,
                 textSelectionEnabled = textSelectionEnabled,
+                contentPadding = PaddingValues(AppTheme.spacing.m),
                 bottomContent = {
                     ActionsRow(targetState.actions, onClickAction)
                 }
