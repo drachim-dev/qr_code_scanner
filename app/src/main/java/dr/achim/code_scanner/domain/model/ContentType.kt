@@ -44,6 +44,6 @@ sealed class AssistAction(val icon: ImageVector) {
     ) : AssistAction(Icons.Default.ContentCopy)
 
     data class LaunchUrl(val uri: Uri) : AssistAction(Icons.AutoMirrored.Default.Launch) {
-        override val label = R.string.action_open_browser
+        override val label = R.string.action_open
     }
 }

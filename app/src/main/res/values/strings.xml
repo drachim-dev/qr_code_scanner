@@ -18,7 +18,7 @@
     <string name="action_copy_text">Copy text</string>
     <string name="action_copy_success_toast_title">Copied</string>
     <string name="clipboard_label_scanned_code">scanned code</string>
-    <string name="action_open_browser">Open in browser</string>
+    <string name="action_open">Open</string>
     <string name="action_open_chooser_title">Open with</string>
     <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
 
