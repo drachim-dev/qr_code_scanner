@@ -25,12 +25,15 @@ Everything is designed to be easy and pleasant to use.
 ## Screenshots
 
 <p float="left">
-  <img src="screenshots/home.png" width="260" alt="home screen"/>
-  <img src="screenshots/result_wifi.png" width="260" alt="scanned wifi qr code"/> 
-  <img src="screenshots/result_url.png" width="260" alt="scanned url qr code"/> 
-  <img src="screenshots/home_dark.png" width="260" alt="home screen in dark theme"/>
+  <img src="screenshots/result_wifi.png" width="200" alt="scanned wifi code"/>
+  <img src="screenshots/result_phone.png" width="200" alt="scanned phone number code"/>
+  <img src="screenshots/result_url.png" width="200" alt="scanned url code"/>
+  <img src="screenshots/home_dark.png" width="200" alt="home screen in dark theme"/>
+  <img src="screenshots/home_light.png" width="200" alt="home screen in light theme"/>
 </p>
 
 ## Download
 
-Not available for download yet
+<a href="https://play.google.com/store/apps/details?id=dr.achim.code_scanner">
+  <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" width="260"/>
+</a>

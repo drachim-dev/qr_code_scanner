@@ -18,8 +18,8 @@ class CodeParameterProvider : PreviewParameterProvider<Code> {
         Code.Url(
             id = "2",
             rawValue = null,
-            displayValue = "https://stackoverflow.com/questions/71927791/android-jetpack-compose-how-to-make-text-utilize-complete-row-space-and-break-t",
-            uri = Uri.parse("https://stackoverflow.com/questions/71927791/android-jetpack-compose-how-to-make-text-utilize-complete-row-space-and-break-t")
+            displayValue = "https://en.akinator.com",
+            uri = Uri.parse("https://en.akinator.com")
         ),
         Code.Phone(
             id = "3",
