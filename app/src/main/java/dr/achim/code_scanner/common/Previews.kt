@@ -7,7 +7,8 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 
 @PreviewFontScale
 @PreviewLightDark
-@Preview(showBackground = true)
+@Preview(showBackground = true, locale = "de")
+@Preview(showBackground = true, locale = "en")
 annotation class DefaultPreview
 
 @PreviewLightDark
