@@ -102,23 +102,14 @@ class CustomTabHelper(
         extras: Bundle? = null,
         otherLikelyBundles: List<Bundle>? = null
     ): Boolean {
-        return customTabsSession?.run {
-            mayLaunchUrl(uri, extras, otherLikelyBundles)
-        } ?: false
+        return customTabsSession?.mayLaunchUrl(uri, extras, otherLikelyBundles) == true
     }
 
-    fun getLaunchUrlIntent(uri: Uri): Intent? {
-        // Custom Tabs are not supported by any browser on the device
-        val customTabsPackage = CustomTabsClient.getPackageName(context, emptyList())
-            ?: return null
-
-        // Build Custom Tabs Intent
+    fun getLaunchUrlIntent(uri: Uri): Intent {
         val customTabsIntent = CustomTabsIntent.Builder(customTabsSession)
+            .setSendToExternalDefaultHandlerEnabled(true)
             .build()
 
-        customTabsIntent.intent.data = uri
-        customTabsIntent.intent.`package` = customTabsPackage
-
-        return customTabsIntent.intent
+        return customTabsIntent.intent.apply { data = uri }
     }
 }

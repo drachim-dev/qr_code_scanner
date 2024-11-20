@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
@@ -39,9 +38,7 @@ class ActionHandler(
                     null
                 }
 
-                is AssistAction.LaunchUrl -> {
-                    getAppIntent(uri) ?: customTabHelper.getLaunchUrlIntent(uri)
-                }
+                is AssistAction.LaunchUrl -> customTabHelper.getLaunchUrlIntent(uri)
             }
         }
 
@@ -49,7 +46,7 @@ class ActionHandler(
             try {
                 resultLauncher.launch(it)
                 success = true
-            } catch (e: ActivityNotFoundException) {
+            } catch (_: ActivityNotFoundException) {
                 Toast.makeText(
                     context,
                     context.getString(R.string.action_error_no_compatible_app_installed),
@@ -59,20 +56,6 @@ class ActionHandler(
         }
 
         return success
-    }
-
-    /**
-     * Creates an intent to open the given URI and handles app selection.
-     * @return the intent if a suitable activity is found, otherwise null.
-     */
-    private fun getAppIntent(uri: Uri): Intent? {
-        // handle app links for installed apps
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        val pm = context.packageManager
-
-        return if (pm.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
-            Intent.createChooser(intent, context.getString(R.string.action_open_chooser_title))
-        } else null
     }
 
     private fun getAddContactIntent(name: String?, phoneNumber: String?, email: String?): Intent {
