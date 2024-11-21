@@ -134,7 +134,6 @@ dependencies {
     implementation(libs.material3)
 
     implementation(libs.play.services.code.scanner)
-    implementation(libs.play.services.mlkit.barcode.scanning)
 
     implementation(libs.ui)
     implementation(libs.ui.graphics)

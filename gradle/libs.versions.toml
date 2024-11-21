@@ -4,7 +4,6 @@ activityCompose = "1.9.3"
 androidPlayReview = "2.0.2"
 androidxCore = "1.15.0"
 androidGradlePlugin = "8.6.1"
-barcodeScanning = "18.3.1"
 billingVersion = "7.1.1"
 browser = "1.8.0"
 codeScanner = "16.1.0"
@@ -46,7 +45,6 @@ lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-v
 material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { group = "androidx.compose.material", name = "material-icons-extended" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
-play-services-mlkit-barcode-scanning = { group = "com.google.android.gms", name = "play-services-mlkit-barcode-scanning", version.ref = "barcodeScanning" }
 play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "codeScanner" }
 revenuecat-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "revenueCat" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
