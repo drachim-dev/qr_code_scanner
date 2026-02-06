@@ -18,8 +18,8 @@ import dr.achim.code_scanner.presentation.theme.AppTheme
 @Composable
 fun ContentContainer(
     code: Code,
-    textSelectionEnabled: Boolean = true,
     modifier: Modifier = Modifier,
+    textSelectionEnabled: Boolean = true,
     contentPadding: PaddingValues = PaddingValues(),
     bottomContent: @Composable () -> Unit
 ) {

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="access_icon_back">Zurück</string>
-    <string name="access_icon_camera">Kamera Icon</string>
     <string name="access_icon_close">Schließen</string>
     <string name="access_icon_edit_list">Liste bearbeiten</string>
     <string name="access_icon_handshake">Handschlag Icon</string>
-    <string name="access_icon_info">Info</string>
     <string name="access_icon_more_options">Mehr Optionen</string>
     <string name="access_icon_trash">Mülleimer Icon</string>
 
@@ -18,7 +16,6 @@
     <string name="action_copy_success_toast_title">Kopiert</string>
     <string name="clipboard_label_scanned_code">Kopierter Code</string>
     <string name="action_open">Öffnen</string>
-    <string name="action_open_chooser_title">Öffnen mit</string>
     <string name="action_error_no_compatible_app_installed">Keine kompatible App installiert</string>
 
     <string name="common_cancel">Abbrechen</string>
@@ -26,7 +23,6 @@
     <string name="common_date_month_year">MMM yyyy</string>
     <string name="common_date_time_short_suffix">Uhr</string>
 
-    <string name="screen_about_us">Über uns</string>
     <string name="screen_about_us_profile_description">Hinter den Kulissen - meine flauschigen Assistentinnen, June und Samira!\n\nSpezialgebiet:\nSpontane Tastaturspaziergänge \uD83D\uDC3E"</string>
     <string name="screen_about_us_support_description">Unterstütze unsere Arbeit"</string>
     <string name="screen_about_us_rate_app">App bewerten (kostenlos)</string>

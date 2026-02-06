@@ -5,7 +5,6 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.provider.ContactsContract
@@ -126,7 +125,7 @@ class ActionHandler(
     }
 
     private fun getDialIntent(phoneNumber: String): Intent {
-        val uri = Uri.parse("tel:$phoneNumber")
+        val uri = "tel:$phoneNumber".toUri()
         return Intent(Intent.ACTION_DIAL, uri)
     }
 

@@ -18,7 +18,7 @@ import dr.achim.code_scanner.presentation.theme.AppTheme
 
 @Composable
 fun CheckCard(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(AppTheme.spacing.m),
     title: @Composable () -> Unit = {},
     description: @Composable () -> Unit = {},
@@ -42,13 +42,13 @@ fun CheckCard(
         onClick = onClick,
     ) {
         Row(
-            verticalAlignment = Alignment.Companion.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(AppTheme.spacing.s),
-            modifier = Modifier.Companion.padding(contentPadding)
+            modifier = Modifier.padding(contentPadding)
         ) {
-            Column(modifier = Modifier.Companion.weight(1f)) {
+            Column(modifier = Modifier.weight(1f)) {
                 decoratedTitle()
-                Spacer(modifier = Modifier.Companion.height(AppTheme.spacing.m))
+                Spacer(modifier = Modifier.height(AppTheme.spacing.m))
                 decoratedDescription()
             }
 

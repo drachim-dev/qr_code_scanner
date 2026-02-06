@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.currentStateAsState
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -47,7 +48,7 @@ fun AppNavigation(
 
     // Prevents quick double taps on back arrow
     val canNavigateBack = navController.previousBackStackEntry != null &&
-            backStackEntry?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.STARTED) == true
+            backStackEntry?.lifecycle?.currentStateAsState()?.value?.isAtLeast(Lifecycle.State.STARTED) == true
     val navigateUp: NavigateUp? = if (canNavigateBack) {
         { navController.navigateUp() }
     } else null

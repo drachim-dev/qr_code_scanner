@@ -1,6 +1,7 @@
 package dr.achim.code_scanner.data.source
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import dr.achim.code_scanner.common.PrefKeys
 import javax.inject.Inject
 
@@ -12,9 +13,9 @@ class SettingsSourceImpl @Inject constructor(private val prefs: SharedPreference
     }
 
     override fun setHasSeenOnboarding(value: Boolean) {
-        prefs.edit()
-            .putBoolean(PrefKeys.HasSeenOnboarding, value)
-            .apply()
+        prefs.edit {
+            putBoolean(PrefKeys.HasSeenOnboarding, value)
+        }
     }
 
     override fun getAutoStartCamera(): Boolean {
@@ -22,9 +23,9 @@ class SettingsSourceImpl @Inject constructor(private val prefs: SharedPreference
     }
 
     override fun setAutoStartCamera(value: Boolean) {
-        prefs.edit()
-            .putBoolean(PrefKeys.AutoStartCamera, value)
-            .apply()
+        prefs.edit {
+            putBoolean(PrefKeys.AutoStartCamera, value)
+        }
     }
 
     override fun getShowSupportHint(): Boolean {
@@ -32,8 +33,8 @@ class SettingsSourceImpl @Inject constructor(private val prefs: SharedPreference
     }
 
     override fun setShowSupportHint(value: Boolean) {
-        prefs.edit()
-            .putBoolean(PrefKeys.ShowSupportHint, value)
-            .apply()
+        prefs.edit {
+            putBoolean(PrefKeys.ShowSupportHint, value)
+        }
     }
 }

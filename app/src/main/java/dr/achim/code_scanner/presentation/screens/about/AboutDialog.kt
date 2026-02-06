@@ -2,7 +2,6 @@ package dr.achim.code_scanner.presentation.screens.about
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.revenuecat.purchases.models.StoreProduct
@@ -173,7 +173,7 @@ fun AboutDialogContent(
 @Composable
 private fun BoxScope.Confetti(onAnimationCompleted: () -> Unit) {
     KonfettiView(
-        modifier = Modifier.Companion
+        modifier = Modifier
             .matchParentSize()
             .align(Alignment.BottomCenter),
         parties = listOf(
@@ -260,7 +260,7 @@ private fun AboutProfile() {
 private fun launchPlayStoreEntry(context: Context) {
     val packageName = context.packageName
     val intent = Intent(Intent.ACTION_VIEW).apply {
-        data = Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+        data = "https://play.google.com/store/apps/details?id=$packageName".toUri()
         setPackage("com.android.vending")
     }
 

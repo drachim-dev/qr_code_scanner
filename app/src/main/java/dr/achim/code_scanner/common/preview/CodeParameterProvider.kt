@@ -1,7 +1,7 @@
 package dr.achim.code_scanner.common.preview
 
-import android.net.Uri
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.core.net.toUri
 import dr.achim.code_scanner.domain.model.Code
 
 class CodeParameterProvider : PreviewParameterProvider<Code> {
@@ -19,7 +19,7 @@ class CodeParameterProvider : PreviewParameterProvider<Code> {
             id = "2",
             rawValue = null,
             displayValue = "https://en.akinator.com",
-            uri = Uri.parse("https://en.akinator.com")
+            uri = "https://en.akinator.com".toUri()
         ),
         Code.Phone(
             id = "3",

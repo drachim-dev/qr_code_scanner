@@ -17,9 +17,9 @@ package dr.achim.code_scanner.service.customtab.internal
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
+import androidx.core.net.toUri
 
 /**
  * Helper class for Custom Tabs.
@@ -50,7 +50,7 @@ internal object CustomTabsHelper {
 
         val pm = context.packageManager
         // Get default VIEW intent handler.
-        val activityIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com"))
+        val activityIntent = Intent(Intent.ACTION_VIEW, "http://www.example.com".toUri())
         val defaultViewHandlerInfo = pm.resolveActivity(activityIntent, 0)
         var defaultViewHandlerPackageName: String? = null
         if (defaultViewHandlerInfo != null) {
@@ -109,7 +109,7 @@ internal object CustomTabsHelper {
                 if (resolveInfo.activityInfo == null) continue
                 return true
             }
-        } catch (e: RuntimeException) {
+        } catch (_: RuntimeException) {
             Log.e(TAG, "Runtime exception while getting specialized handlers")
         }
 
