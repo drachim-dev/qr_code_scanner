@@ -2,7 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.aboutlibraries.plugin)
+    alias(libs.plugins.aboutlibraries.plugin.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.plugin)
     alias(libs.plugins.hilt)
@@ -19,16 +19,19 @@ kotlin {
 
 android {
     namespace = "dr.achim.code_scanner"
-    compileSdk = 35
+    compileSdk = 36
 
     androidResources {
         generateLocaleConfig = true
+
+        // https://developer.android.com/guide/topics/resources/app-languages#gradle-config
+        localeFilters.addAll(listOf("en", "de"))
     }
 
     defaultConfig {
         applicationId = "dr.achim.code_scanner"
         minSdk = 30
-        targetSdk = 35
+        targetSdk = 36
         versionCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
@@ -51,9 +54,6 @@ android {
             localProperties.getProperty("REVENUECAT_KEY", "")
         }
         buildConfigField("String", "REVENUECAT_KEY", "\"${revenueCatKey}\"")
-
-        // https://developer.android.com/guide/topics/resources/app-languages#gradle-config
-        resourceConfigurations += listOf("en", "de")
     }
 
     signingConfigs {

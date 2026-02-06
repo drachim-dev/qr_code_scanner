@@ -15,6 +15,7 @@ import dr.achim.code_scanner.domain.usecase.supporthint.GetShowSupportHint
 import dr.achim.code_scanner.domain.usecase.supporthint.SetShowSupportHint
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 @HiltViewModel(assistedFactory = HomeViewModel.Factory::class)
@@ -64,7 +65,9 @@ class HomeViewModel @AssistedInject constructor(
             startScanningUseCase().collect { code ->
                 code?.let {
                     onScanResultCallback(code)
-                    _viewState.value = buildViewState(code)
+                    _viewState.update {
+                        buildViewState(code)
+                    }
                     addCodeToHistory(code)
                 }
             }
