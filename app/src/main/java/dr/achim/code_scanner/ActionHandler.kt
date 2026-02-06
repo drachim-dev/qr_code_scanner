@@ -13,13 +13,14 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.net.toUri
 import com.google.mlkit.vision.barcode.common.Barcode
 import dr.achim.code_scanner.domain.model.AssistAction
 import dr.achim.code_scanner.service.customtab.CustomTabHelper
 
 class ActionHandler(
     private val context: ComponentActivity,
-    private val resultLauncher: ActivityResultLauncher<Intent>
+    private val resultLauncher: ActivityResultLauncher<Intent>,
 ) {
 
     fun handleAction(
@@ -30,6 +31,7 @@ class ActionHandler(
         val intent = assistAction.run {
             when (this) {
                 is AssistAction.AddContact -> getAddContactIntent(name, phoneNumber, email)
+                is AssistAction.AddEsim -> getAddEsimIntent(activationCode)
                 is AssistAction.Call -> getDialIntent(phoneNumber)
                 is AssistAction.Connect -> getWifiIntent(ssid, password ?: "", encryptionType)
                 is AssistAction.Copy -> {
@@ -56,6 +58,12 @@ class ActionHandler(
         }
 
         return success
+    }
+
+    private fun getAddEsimIntent(activationCode: String): Intent {
+        return Intent(Intent.ACTION_VIEW).apply {
+            data = activationCode.toUri()
+        }
     }
 
     private fun getAddContactIntent(name: String?, phoneNumber: String?, email: String?): Intent {

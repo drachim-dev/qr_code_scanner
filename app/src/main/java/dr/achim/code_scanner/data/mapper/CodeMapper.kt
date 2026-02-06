@@ -38,6 +38,14 @@ fun Barcode.toModel(): Code {
             }
         }
 
+        // esim profile
+        Barcode.TYPE_TEXT if rawValue?.startsWith("LPA:") == true -> {
+            Code.Esim(
+                id = id,
+                rawValue = rawValue ?: "",
+            )
+        }
+
         Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
             if (text != null) {
@@ -170,6 +178,10 @@ fun Code.toEntity(): CodeEntity {
             emailAddress = emailAddress,
             contactAddress = address,
             contactUrl = url,
+        )
+
+        is Code.Esim -> baseEntity.copy(
+            type = Barcode.TYPE_TEXT
         )
 
         is Code.NotSupported -> baseEntity.copy(

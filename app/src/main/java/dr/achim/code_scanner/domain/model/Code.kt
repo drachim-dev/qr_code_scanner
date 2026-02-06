@@ -6,6 +6,7 @@ import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.SimCardDownload
 import androidx.compose.material.icons.filled.Wifi
 import dr.achim.code_scanner.R
 import java.time.OffsetDateTime
@@ -15,6 +16,16 @@ sealed class Code : ContentType {
     val created: OffsetDateTime = OffsetDateTime.now()
     abstract val rawValue: String?
     abstract val displayValue: String?
+
+    data class Esim(
+        override val id: String,
+        override val rawValue: String,
+    ) : Code() {
+        override val displayValue = null
+        override val actions = listOf(AssistAction.AddEsim(rawValue))
+        override val rawContent: String? = null
+        override val icon = Icons.Default.SimCardDownload
+    }
 
     data class Phone(
         override val id: String,

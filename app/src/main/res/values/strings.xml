@@ -12,6 +12,7 @@
     <string name="access_icon_trash">Trash bin icon</string>
 
     <string name="action_add_contact">Add contact</string>
+    <string name="action_add_esim">Add esim</string>
     <string name="action_add_wifi">Add wifi</string>
     <string name="action_call_number">Call number</string>
     <string name="action_copy_password">Copy password</string>
