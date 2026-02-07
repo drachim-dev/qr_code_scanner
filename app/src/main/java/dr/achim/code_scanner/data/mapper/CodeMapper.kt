@@ -1,7 +1,7 @@
 package dr.achim.code_scanner.data.mapper
 
-import android.net.Uri
 import android.webkit.URLUtil
+import androidx.core.net.toUri
 import com.google.mlkit.vision.barcode.common.Barcode
 import dr.achim.code_scanner.data.entity.CodeEntity
 import dr.achim.code_scanner.domain.model.Code
@@ -60,12 +60,12 @@ fun Barcode.toModel(): Code {
 
         Barcode.TYPE_URL -> {
             val url = url?.url
-            if (URLUtil.isValidUrl(url)) {
+            if (url != null && URLUtil.isValidUrl(url)) {
                 Code.Url(
                     id = id,
                     rawValue = rawValue,
                     displayValue = displayValue,
-                    uri = Uri.parse(url)
+                    uri = url.toUri()
                 )
             } else null
         }
@@ -131,12 +131,12 @@ fun CodeEntity.toModel(): Code {
         }
 
         Barcode.TYPE_URL -> {
-            if (URLUtil.isValidUrl(urlLink)) {
+            if (urlLink != null && URLUtil.isValidUrl(urlLink)) {
                 Code.Url(
                     id = id,
                     rawValue = rawValue,
                     displayValue = displayValue,
-                    uri = Uri.parse(urlLink)
+                    uri = urlLink.toUri()
                 )
             } else null
         }

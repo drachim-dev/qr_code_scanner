@@ -329,7 +329,7 @@ private fun HistoryListItem(
 ) {
     val context = LocalContext.current
     val dateTimeFormatter = remember { DateTimeFormatter(context) }
-    var expanded by remember { mutableStateOf<Boolean>(false) }
+    var expanded by remember { mutableStateOf(false) }
 
     val selected = selectedItems.contains(code)
     val colors = if (selected) {

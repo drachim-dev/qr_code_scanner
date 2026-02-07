@@ -100,7 +100,7 @@ internal object CustomTabsHelper {
         try {
             val pm = context.packageManager
             val handlers = pm.queryIntentActivities(intent, PackageManager.GET_RESOLVED_FILTER)
-            if (handlers.size == 0) {
+            if (handlers.isEmpty()) {
                 return false
             }
             for (resolveInfo in handlers) {
