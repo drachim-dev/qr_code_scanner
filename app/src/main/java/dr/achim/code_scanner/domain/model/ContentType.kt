@@ -3,10 +3,10 @@ package dr.achim.code_scanner.domain.model
 import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Launch
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.PersonAdd
-import androidx.compose.material.icons.filled.SimCardDownload
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.ui.graphics.vector.ImageVector
 import dr.achim.code_scanner.R
@@ -33,7 +33,7 @@ sealed class AssistAction(val icon: ImageVector) {
     data class AddEsim(
         val activationCode: String,
         override val label: Int = R.string.action_add_esim
-    ) : AssistAction(Icons.Default.SimCardDownload)
+    ) : AssistAction(Icons.Default.Add)
 
     data class Call(val phoneNumber: String) : AssistAction(Icons.Default.Call) {
         override val label = R.string.action_call_number

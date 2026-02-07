@@ -118,6 +118,14 @@ fun CodeEntity.toModel(): Code {
             )
         }
 
+        // esim profile
+        Barcode.TYPE_TEXT if rawValue?.startsWith("LPA:") == true -> {
+            Code.Esim(
+                id = id,
+                rawValue = rawValue,
+            )
+        }
+
         Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
             if (text != null) {
