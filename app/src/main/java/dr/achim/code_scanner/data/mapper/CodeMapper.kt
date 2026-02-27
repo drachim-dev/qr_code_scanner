@@ -11,106 +11,112 @@ import java.util.UUID
 
 fun Barcode.toModel(): Code {
     val id = UUID.randomUUID().toString()
-    val code = when {
-        // esim profile
-        rawValue?.startsWith("LPA:", ignoreCase = true) == true -> {
-            Code.Esim(
-                id = id,
-                rawValue = rawValue ?: "",
-            )
-        }
 
-        // passkey
-        rawValue?.startsWith("FIDO:/", ignoreCase = true) == true -> {
-            Code.Passkey(
-                id = id,
-                rawValue = rawValue!!,
-                uri = rawValue!!.toUri()
-            )
-        }
-
-        valueType == Barcode.TYPE_PHONE -> {
-            val phoneNumber = phone?.number
-            if (phoneNumber != null) {
-                Code.Phone(
+    val code = try {
+        when {
+            // esim profile
+            rawValue?.startsWith("LPA:", ignoreCase = true) == true -> {
+                Code.Esim(
                     id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    phoneNumber = phoneNumber
-                )
-            } else null
-        }
-
-        valueType == Barcode.TYPE_CONTACT_INFO -> {
-            contactInfo?.run {
-                Code.Contact(
-                    id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    name = name?.formattedName,
-                    phone = phones.firstOrNull()?.number,
-                    emailAddress = emails.firstOrNull()?.address,
-                    address = addresses.firstOrNull()?.addressLines?.joinToString(separator = " "),
-                    url = urls.firstOrNull(),
-                    organization = organization
+                    rawValue = rawValue!!,
                 )
             }
-        }
 
-        valueType == Barcode.TYPE_TEXT -> {
-            val text = displayValue ?: rawValue
-            when (text) {
-                null -> null
+            // passkey
+            rawValue?.startsWith("FIDO:/", ignoreCase = true) == true -> {
+                Code.Passkey(
+                    id = id,
+                    rawValue = rawValue!!,
+                    uri = rawValue!!.toUri()
+                )
+            }
 
-                else if text.isValidUrl() -> {
-                    // workaround for urls from type text
+            valueType == Barcode.TYPE_PHONE -> {
+                val phoneNumber = phone?.number
+                if (phoneNumber != null) {
+                    Code.Phone(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        phoneNumber = phoneNumber
+                    )
+                } else null
+            }
+
+            valueType == Barcode.TYPE_CONTACT_INFO -> {
+                contactInfo?.run {
+                    Code.Contact(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        name = name?.formattedName,
+                        phone = phones.firstOrNull()?.number,
+                        emailAddress = emails.firstOrNull()?.address,
+                        address = addresses.firstOrNull()?.addressLines?.joinToString(separator = " "),
+                        url = urls.firstOrNull(),
+                        organization = organization
+                    )
+                }
+            }
+
+            valueType == Barcode.TYPE_TEXT -> {
+                val text = displayValue ?: rawValue
+                when (text) {
+                    null -> null
+
+                    else if text.isValidUrl() -> {
+                        // workaround for urls from type text
+                        Code.Url(
+                            id = id,
+                            rawValue = rawValue,
+                            displayValue = displayValue,
+                            uri = text.toNetworkUri()
+                        )
+                    }
+
+                    else -> {
+                        Code.Text(
+                            id = id,
+                            rawValue = rawValue,
+                            displayValue = displayValue,
+                            text = text
+                        )
+                    }
+                }
+            }
+
+            valueType == Barcode.TYPE_URL -> {
+                val url = url?.url
+                if (url != null && url.isValidUrl()) {
                     Code.Url(
                         id = id,
                         rawValue = rawValue,
                         displayValue = displayValue,
-                        uri = text.toNetworkUri()
+                        uri = url.toUri()
                     )
-                }
+                } else null
+            }
 
-                else -> {
-                    Code.Text(
+            valueType == Barcode.TYPE_WIFI -> {
+                val wifiData = wifi
+                val ssid = wifiData?.ssid
+                if (wifiData != null && ssid != null) {
+                    Code.Wifi(
                         id = id,
                         rawValue = rawValue,
                         displayValue = displayValue,
-                        text = text
+                        ssid = ssid,
+                        password = wifiData.password ?: "",
+                        encryptionType = wifiData.encryptionType
                     )
-                }
+                } else null
             }
-        }
 
-        valueType == Barcode.TYPE_URL -> {
-            val url = url?.url
-            if (url != null && url.isValidUrl()) {
-                Code.Url(
-                    id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    uri = url.toUri()
-                )
-            } else null
+            else -> null
         }
-
-        valueType == Barcode.TYPE_WIFI -> {
-            val wifiData = wifi
-            val ssid = wifiData?.ssid
-            if (wifiData != null && ssid != null) {
-                Code.Wifi(
-                    id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    ssid = ssid,
-                    password = wifiData.password ?: "",
-                    encryptionType = wifiData.encryptionType
-                )
-            } else null
-        }
-
-        else -> null
+    } catch (_: NullPointerException) {
+        // TODO: Add logging
+        null
     }
 
     return code ?: Code.NotSupported(id = id, rawValue = rawValue, displayValue = displayValue)
