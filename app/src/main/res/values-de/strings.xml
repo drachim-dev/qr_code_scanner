@@ -14,9 +14,11 @@
     <string name="action_copy_password">Passwort kopieren</string>
     <string name="action_copy_text">Text kopieren</string>
     <string name="action_copy_success_toast_title">Kopiert</string>
-    <string name="clipboard_label_scanned_code">Kopierter Code</string>
     <string name="action_open">Öffnen</string>
+    <string name="action_passkey">Passkey</string>
     <string name="action_error_no_compatible_app_installed">Keine kompatible App installiert</string>
+
+    <string name="clipboard_label_scanned_code">Kopierter Code</string>
 
     <string name="common_cancel">Abbrechen</string>
     <string name="common_confirm">Bestätigen</string>

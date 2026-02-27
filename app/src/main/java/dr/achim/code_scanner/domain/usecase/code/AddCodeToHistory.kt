@@ -5,6 +5,8 @@ import dr.achim.code_scanner.domain.repo.CodeRepository
 
 class AddCodeToHistory(private val repository: CodeRepository) {
     suspend operator fun invoke(code: Code) {
-        repository.insert(code)
+        if (!code.isSensitive()) {
+            repository.insert(code)
+        }
     }
 }

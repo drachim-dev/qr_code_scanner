@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TextSnippet
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.SimCardDownload
@@ -25,6 +26,17 @@ sealed class Code : ContentType {
         override val actions = listOf(AssistAction.AddEsim(rawValue))
         override val rawContent: String? = null
         override val icon = Icons.Default.SimCardDownload
+    }
+
+    data class Passkey(
+        override val id: String,
+        override val rawValue: String,
+        val uri: Uri,
+    ) : Code() {
+        override val displayValue = null
+        override val actions = listOf(AssistAction.LoginWithPasskey(uri))
+        override val rawContent: String? = null
+        override val icon = Icons.Default.Key
     }
 
     data class Phone(
@@ -116,5 +128,12 @@ sealed class Code : ContentType {
             (displayValue ?: rawValue)?.let { listOf(AssistAction.Copy(it)) } ?: emptyList()
         override val rawContent = displayValue ?: rawValue
         override val icon = Icons.Filled.CameraAlt
+    }
+
+    fun isSensitive(): Boolean {
+        return when (this) {
+            is Passkey -> true
+            else -> false
+        }
     }
 }

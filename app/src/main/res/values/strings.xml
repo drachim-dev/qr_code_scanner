@@ -15,9 +15,11 @@
     <string name="action_copy_password">Copy password</string>
     <string name="action_copy_text">Copy text</string>
     <string name="action_copy_success_toast_title">Copied</string>
-    <string name="clipboard_label_scanned_code">scanned code</string>
     <string name="action_open">Open</string>
+    <string name="action_passkey">Passkey</string>
     <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
+
+    <string name="clipboard_label_scanned_code">scanned code</string>
 
     <string name="empty_screen_title">Looks quite empty here.</string>
     <string name="empty_screen_description">Start now by scanning a code</string>

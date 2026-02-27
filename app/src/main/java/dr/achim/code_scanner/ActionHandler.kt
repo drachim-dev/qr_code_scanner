@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.provider.ContactsContract
@@ -40,6 +41,7 @@ class ActionHandler(
                 }
 
                 is AssistAction.LaunchUrl -> customTabHelper.getLaunchUrlIntent(uri)
+                is AssistAction.LoginWithPasskey -> getPasskeyIntent(uri)
             }
         }
 
@@ -127,6 +129,10 @@ class ActionHandler(
     private fun getDialIntent(phoneNumber: String): Intent {
         val uri = "tel:$phoneNumber".toUri()
         return Intent(Intent.ACTION_DIAL, uri)
+    }
+
+    private fun getPasskeyIntent(uri: Uri): Intent {
+        return Intent(Intent.ACTION_VIEW, uri)
     }
 
     private fun copyToClipboard(text: String) {

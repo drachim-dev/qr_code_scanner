@@ -11,8 +11,25 @@ import java.util.UUID
 
 fun Barcode.toModel(): Code {
     val id = UUID.randomUUID().toString()
-    val code = when (valueType) {
-        Barcode.TYPE_PHONE -> {
+    val code = when {
+        // esim profile
+        rawValue?.startsWith("LPA:", ignoreCase = true) == true -> {
+            Code.Esim(
+                id = id,
+                rawValue = rawValue ?: "",
+            )
+        }
+
+        // passkey
+        rawValue?.startsWith("FIDO:/", ignoreCase = true) == true -> {
+            Code.Passkey(
+                id = id,
+                rawValue = rawValue!!,
+                uri = rawValue!!.toUri()
+            )
+        }
+
+        valueType == Barcode.TYPE_PHONE -> {
             val phoneNumber = phone?.number
             if (phoneNumber != null) {
                 Code.Phone(
@@ -24,7 +41,7 @@ fun Barcode.toModel(): Code {
             } else null
         }
 
-        Barcode.TYPE_CONTACT_INFO -> {
+        valueType == Barcode.TYPE_CONTACT_INFO -> {
             contactInfo?.run {
                 Code.Contact(
                     id = id,
@@ -40,15 +57,7 @@ fun Barcode.toModel(): Code {
             }
         }
 
-        // esim profile
-        Barcode.TYPE_TEXT if rawValue?.startsWith("LPA:") == true -> {
-            Code.Esim(
-                id = id,
-                rawValue = rawValue ?: "",
-            )
-        }
-
-        Barcode.TYPE_TEXT -> {
+        valueType == Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
             when (text) {
                 null -> null
@@ -74,7 +83,7 @@ fun Barcode.toModel(): Code {
             }
         }
 
-        Barcode.TYPE_URL -> {
+        valueType == Barcode.TYPE_URL -> {
             val url = url?.url
             if (url != null && url.isValidUrl()) {
                 Code.Url(
@@ -86,7 +95,7 @@ fun Barcode.toModel(): Code {
             } else null
         }
 
-        Barcode.TYPE_WIFI -> {
+        valueType == Barcode.TYPE_WIFI -> {
             val wifiData = wifi
             val ssid = wifiData?.ssid
             if (wifiData != null && ssid != null) {
@@ -108,8 +117,16 @@ fun Barcode.toModel(): Code {
 }
 
 fun CodeEntity.toModel(): Code {
-    val code = when (type) {
-        Barcode.TYPE_PHONE -> {
+    val code = when {
+        // esim profile
+        rawValue?.startsWith("LPA:", ignoreCase = true) == true -> {
+            Code.Esim(
+                id = id,
+                rawValue = rawValue,
+            )
+        }
+
+        type == Barcode.TYPE_PHONE -> {
             if (phoneNumber != null) {
                 Code.Phone(
                     id = id,
@@ -120,7 +137,7 @@ fun CodeEntity.toModel(): Code {
             } else null
         }
 
-        Barcode.TYPE_CONTACT_INFO -> {
+        type == Barcode.TYPE_CONTACT_INFO -> {
             Code.Contact(
                 id = id,
                 rawValue = rawValue,
@@ -134,15 +151,7 @@ fun CodeEntity.toModel(): Code {
             )
         }
 
-        // esim profile
-        Barcode.TYPE_TEXT if rawValue?.startsWith("LPA:") == true -> {
-            Code.Esim(
-                id = id,
-                rawValue = rawValue,
-            )
-        }
-
-        Barcode.TYPE_TEXT -> {
+        type == Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
             when (text) {
                 null -> null
@@ -168,7 +177,7 @@ fun CodeEntity.toModel(): Code {
             }
         }
 
-        Barcode.TYPE_URL -> {
+        type == Barcode.TYPE_URL -> {
             if (urlLink != null && urlLink.isValidUrl()) {
                 Code.Url(
                     id = id,
@@ -179,7 +188,7 @@ fun CodeEntity.toModel(): Code {
             } else null
         }
 
-        Barcode.TYPE_WIFI -> {
+        type == Barcode.TYPE_WIFI -> {
             if (wifiSsid != null) {
                 Code.Wifi(
                     id = id,
@@ -224,6 +233,11 @@ fun Code.toEntity(): CodeEntity {
 
         is Code.NotSupported -> baseEntity.copy(
             type = Barcode.TYPE_UNKNOWN,
+        )
+
+        is Code.Passkey -> baseEntity.copy(
+            type = Barcode.TYPE_TEXT,
+            urlLink = uri.toString(),
         )
 
         is Code.Phone -> baseEntity.copy(

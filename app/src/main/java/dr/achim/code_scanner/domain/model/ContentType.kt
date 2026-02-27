@@ -3,6 +3,7 @@ package dr.achim.code_scanner.domain.model
 import android.net.Uri
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Launch
+import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.ContentCopy
@@ -51,5 +52,9 @@ sealed class AssistAction(val icon: ImageVector) {
 
     data class LaunchUrl(val uri: Uri) : AssistAction(Icons.AutoMirrored.Default.Launch) {
         override val label = R.string.action_open
+    }
+
+    data class LoginWithPasskey(val uri: Uri) : AssistAction(Icons.AutoMirrored.Default.Login) {
+        override val label = R.string.action_passkey
     }
 }
