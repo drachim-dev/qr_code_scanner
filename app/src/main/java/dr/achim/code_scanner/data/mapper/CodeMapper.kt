@@ -1,5 +1,7 @@
 package dr.achim.code_scanner.data.mapper
 
+import android.net.Uri
+import android.util.Patterns
 import android.webkit.URLUtil
 import androidx.core.net.toUri
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -48,19 +50,33 @@ fun Barcode.toModel(): Code {
 
         Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
-            if (text != null) {
-                Code.Text(
-                    id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    text = text
-                )
-            } else null
+            when (text) {
+                null -> null
+
+                else if text.isValidUrl() -> {
+                    // workaround for urls from type text
+                    Code.Url(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        uri = text.toNetworkUri()
+                    )
+                }
+
+                else -> {
+                    Code.Text(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        text = text
+                    )
+                }
+            }
         }
 
         Barcode.TYPE_URL -> {
             val url = url?.url
-            if (url != null && URLUtil.isValidUrl(url)) {
+            if (url != null && url.isValidUrl()) {
                 Code.Url(
                     id = id,
                     rawValue = rawValue,
@@ -128,18 +144,32 @@ fun CodeEntity.toModel(): Code {
 
         Barcode.TYPE_TEXT -> {
             val text = displayValue ?: rawValue
-            if (text != null) {
-                Code.Text(
-                    id = id,
-                    rawValue = rawValue,
-                    displayValue = displayValue,
-                    text = text
-                )
-            } else null
+            when (text) {
+                null -> null
+
+                else if text.isValidUrl() -> {
+                    // workaround for urls from type text
+                    Code.Url(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        uri = text.toNetworkUri()
+                    )
+                }
+
+                else -> {
+                    Code.Text(
+                        id = id,
+                        rawValue = rawValue,
+                        displayValue = displayValue,
+                        text = text
+                    )
+                }
+            }
         }
 
         Barcode.TYPE_URL -> {
-            if (urlLink != null && URLUtil.isValidUrl(urlLink)) {
+            if (urlLink != null && urlLink.isValidUrl()) {
                 Code.Url(
                     id = id,
                     rawValue = rawValue,
@@ -217,4 +247,13 @@ fun Code.toEntity(): CodeEntity {
             wifiEncryptionType = encryptionType,
         )
     }
+}
+
+private fun String.isValidUrl() = Patterns.WEB_URL.matcher(this).matches()
+private fun String.toNetworkUri(): Uri {
+    return if (URLUtil.isNetworkUrl(this)) {
+        this
+    } else {
+        "https://$this"
+    }.toUri()
 }
