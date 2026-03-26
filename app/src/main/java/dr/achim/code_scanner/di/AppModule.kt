@@ -48,7 +48,7 @@ object AppModule {
             context = app,
             klass = CodeDatabase::class.java,
             name = "AppDatabase"
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(false).build()
     }
 
     @Provides
