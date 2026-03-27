@@ -213,7 +213,7 @@ private fun ColumnScope.StoreProductList(
 ) {
     AnimatedVisibility(visible = !isLoading) {
         Column {
-            products.map {
+            products.forEach {
                 ListItem(
                     modifier = Modifier.clickable { onPurchase(it) },
                     headlineContent = {
