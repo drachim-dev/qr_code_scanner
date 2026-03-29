@@ -6,13 +6,14 @@ import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
-import com.google.android.play.core.review.ReviewException
+import androidx.lifecycle.coroutineScope
+import com.google.android.play.core.ktx.requestReview
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
+import kotlinx.coroutines.launch
 
-
-const val kMinUsageReviewCount = 10
+private const val TAG = "InAppReviewService"
+private const val kMinUsageReviewCount = 10
 
 class InAppReviewService(
     private val context: Context,
@@ -42,26 +43,21 @@ class InAppReviewService(
     private fun shouldPrepareReview() = usageCount == kMinUsageReviewCount
 
     private fun prepareReviewInfo() {
-        Log.d(this::class.java.simpleName, "prepareReviewInfo called")
-        val request = reviewManager.requestReviewFlow()
-        request.addOnCompleteListener { task ->
-            reviewInfo = if (task.isSuccessful) {
-                Log.d(this::class.java.simpleName, "ReviewInfo prepared")
-                task.result
-            } else {
-                @ReviewErrorCode val reviewErrorCode = (task.exception as ReviewException).errorCode
-                Log.e(
-                    this::class.java.simpleName,
-                    "Could not start inAppReview. Error: $reviewErrorCode"
-                )
-                null
+        Log.d(TAG, "prepareReviewInfo called")
+        lifecycle.coroutineScope.launch {
+            try {
+                reviewInfo = reviewManager.requestReview()
+                Log.d(TAG, "ReviewInfo prepared")
+            } catch (e: Exception) {
+                Log.e(TAG, "Could not prepare In-App Review", e)
+                reviewInfo = null
             }
         }
     }
 
     fun mayShowReview(activity: Activity) {
-        reviewInfo?.let {
-            val flow = reviewManager.launchReviewFlow(activity, it)
+        reviewInfo?.let { info ->
+            val flow = reviewManager.launchReviewFlow(activity, info)
             flow.addOnCompleteListener { _ ->
                 // The flow has finished. The API does not indicate whether the user
                 // reviewed or not, or even whether the review dialog was shown. Thus, no
