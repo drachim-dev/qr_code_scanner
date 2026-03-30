@@ -6,7 +6,7 @@ workflows:
     environment:
       java: 21
       android_signing:
-        - keystore_reference
+        - key_qr_code_scanner
       groups:
         - google_play
         - firebase_credentials
