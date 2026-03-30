@@ -12,3 +12,8 @@
 # https://github.com/googlesamples/mlkit/issues/1018
 -keep class com.google.mlkit.** { *; }
 -keep class com.google.android.gms.internal.mlkit_code_scanner.** { *; }
+
+# Error during compilation:
+# Missing class com.google.android.gms.common.annotation.NoNullnessRewrite (referenced from: void com.google.android.play.core.ktx.ReviewManagerKtxKt
+# https://issuetracker.google.com/issues/374691245
+-dontwarn com.google.android.gms.common.annotation.**
