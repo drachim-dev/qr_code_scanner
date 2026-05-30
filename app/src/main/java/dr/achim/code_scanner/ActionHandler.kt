@@ -1,5 +1,6 @@
 package dr.achim.code_scanner
 
+import android.app.SearchManager
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -42,6 +43,7 @@ class ActionHandler(
 
                 is AssistAction.LaunchUrl -> customTabHelper.getLaunchUrlIntent(uri)
                 is AssistAction.LoginWithPasskey -> getPasskeyIntent(uri)
+                is AssistAction.Search -> getSearchIntent(query)
             }
         }
 
@@ -133,6 +135,12 @@ class ActionHandler(
 
     private fun getPasskeyIntent(uri: Uri): Intent {
         return Intent(Intent.ACTION_VIEW, uri)
+    }
+
+    private fun getSearchIntent(query: String) : Intent {
+        return Intent(Intent.ACTION_WEB_SEARCH).apply {
+            putExtra(SearchManager.QUERY, query)
+        }
     }
 
     private fun copyToClipboard(text: String) {

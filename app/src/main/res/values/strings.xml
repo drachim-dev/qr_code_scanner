@@ -17,6 +17,7 @@
     <string name="action_copy_success_toast_title">Copied</string>
     <string name="action_open">Open</string>
     <string name="action_passkey">Passkey</string>
+    <string name="action_search">Search</string>
     <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
 
     <string name="clipboard_label_scanned_code">scanned code</string>

@@ -46,7 +46,11 @@ sealed class Code : ContentType {
         val phoneNumber: String,
     ) : Code() {
         override val actions =
-            listOf(AssistAction.Call(phoneNumber), AssistAction.Copy(phoneNumber))
+            listOf(
+                AssistAction.Call(phoneNumber),
+                AssistAction.Copy(phoneNumber),
+                AssistAction.Search(phoneNumber)
+            )
         override val rawContent = phoneNumber
         override val icon = Icons.Default.Phone
     }
@@ -68,7 +72,7 @@ sealed class Code : ContentType {
         override val displayValue: String?,
         val text: String,
     ) : Code() {
-        override val actions = listOf(AssistAction.Copy(text))
+        override val actions = listOf(AssistAction.Copy(text), AssistAction.Search(text))
         override val rawContent = text
         override val icon = Icons.AutoMirrored.Default.TextSnippet
     }
@@ -125,7 +129,12 @@ sealed class Code : ContentType {
         override val displayValue: String?,
     ) : Code() {
         override val actions =
-            (displayValue ?: rawValue)?.let { listOf(AssistAction.Copy(it)) } ?: emptyList()
+            (displayValue ?: rawValue)?.let {
+                listOf(
+                    AssistAction.Copy(it),
+                    AssistAction.Search(it)
+                )
+            } ?: emptyList()
         override val rawContent = displayValue ?: rawValue
         override val icon = Icons.Filled.CameraAlt
     }
