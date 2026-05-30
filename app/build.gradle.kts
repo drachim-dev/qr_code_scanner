@@ -18,7 +18,7 @@ kotlin {
 
 android {
     namespace = "dr.achim.code_scanner"
-    compileSdk = 36
+    compileSdk = 37
 
     androidResources {
         generateLocaleConfig = true
