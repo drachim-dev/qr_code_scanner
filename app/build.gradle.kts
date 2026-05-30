@@ -126,7 +126,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.lifecycle.runtimeCompose)
     implementation(libs.lifecycle.viewModelCompose)
-    implementation(libs.billing.ktx)
     implementation(libs.browser)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.kotlinx.coroutines)
