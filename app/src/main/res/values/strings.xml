@@ -21,6 +21,9 @@
     <string name="action_search">Search</string>
     <string name="action_error_no_compatible_app_installed">No compatible app installed</string>
 
+    <string name="chooser_title_add_otp">Add OTP token to&#8230;</string>
+    <string name="chooser_title_passkey">Login with&#8230;</string>
+
     <string name="clipboard_label_scanned_code">scanned code</string>
 
     <string name="empty_screen_title">Looks quite empty here.</string>

@@ -20,6 +20,9 @@
     <string name="action_search">Suchen</string>
     <string name="action_error_no_compatible_app_installed">Keine kompatible App installiert</string>
 
+    <string name="chooser_title_add_otp">2FA Token hinzufügen zu&#8230;</string>
+    <string name="chooser_title_passkey">Anmelden mit&#8230;</string>
+
     <string name="clipboard_label_scanned_code">Kopierter Code</string>
 
     <string name="common_cancel">Abbrechen</string>

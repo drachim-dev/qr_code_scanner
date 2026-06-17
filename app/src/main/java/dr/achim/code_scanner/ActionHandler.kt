@@ -65,13 +65,15 @@ class ActionHandler(
     }
 
     private fun getAddEsimIntent(activationCode: String): Intent {
-        return Intent(Intent.ACTION_VIEW).apply {
+        val intent = Intent(Intent.ACTION_VIEW).apply {
             data = activationCode.toUri()
         }
+        return Intent.createChooser(intent, null)
     }
 
     private fun getAddOtpIntent(uri: Uri): Intent {
-        return Intent(Intent.ACTION_VIEW, uri)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        return Intent.createChooser(intent, context.getString(R.string.chooser_title_add_otp))
     }
 
     private fun getAddContactIntent(name: String?, phoneNumber: String?, email: String?): Intent {
@@ -139,7 +141,8 @@ class ActionHandler(
     }
 
     private fun getPasskeyIntent(uri: Uri): Intent {
-        return Intent(Intent.ACTION_VIEW, uri)
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        return Intent.createChooser(intent, context.getString(R.string.chooser_title_passkey))
     }
 
     private fun getSearchIntent(query: String) : Intent {
