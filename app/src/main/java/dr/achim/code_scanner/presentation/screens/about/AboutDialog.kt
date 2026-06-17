@@ -100,7 +100,7 @@ fun AboutDialogContent(
     val context = LocalContext.current
     var showConfetti by remember { mutableStateOf(false) }
 
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         eventsFlow.collectLatest {
             when (it) {
                 PurchaseEvent.PurchaseComplete -> {

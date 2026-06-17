@@ -4,17 +4,14 @@ import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.ProductType
 import com.revenuecat.purchases.PurchaseParams
 import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.interfaces.GetStoreProductsCallback
-import com.revenuecat.purchases.interfaces.PurchaseCallback
+import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.models.StoreProduct
-import com.revenuecat.purchases.models.StoreTransaction
+import com.revenuecat.purchases.purchaseWith
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dr.achim.code_scanner.common.Products
+import dr.achim.code_scanner.common.Product
 import dr.achim.code_scanner.common.TAG
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AboutDialogViewModel @Inject constructor() : ViewModel() {
 
-    private val _viewState = MutableStateFlow(AboutDialogState(true, emptyList(), ::buyProduct))
+    private val _viewState = MutableStateFlow(AboutDialogState(true, emptyList(), ::purchaseProduct))
     val viewState = _viewState.asStateFlow()
 
     private val eventChannel = Channel<PurchaseEvent>(Channel.BUFFERED)
@@ -37,45 +34,37 @@ class AboutDialogViewModel @Inject constructor() : ViewModel() {
     }
 
     private fun loadProducts() {
-        val productList = Products.entries.map { it.identifier }
-        Purchases.sharedInstance.getProducts(
-            productList,
-            ProductType.INAPP,
-            object : GetStoreProductsCallback {
-                override fun onError(error: PurchasesError) {
-                    updateProductList(emptyList())
-                    Log.e(TAG, "Code ${error.code}: ${error.message}")
-                }
-
-                override fun onReceived(storeProducts: List<StoreProduct>) {
-                    updateProductList(storeProducts)
-                }
-            })
+        val productIdentifiers = Product.entries.map { it.identifier }
+        Purchases.sharedInstance.getProductsWith(
+            productIds = productIdentifiers,
+            type = ProductType.INAPP,
+            onError = { error ->
+                updateProductList(emptyList())
+                Log.e(TAG, "Code ${error.code}: ${error.message}")
+            }
+        ) { storeProducts ->
+            updateProductList(storeProducts)
+        }
     }
 
     private fun updateProductList(products: List<StoreProduct>) {
-        _viewState.value = AboutDialogState(false, products, ::buyProduct)
+        _viewState.value = AboutDialogState(false, products, ::purchaseProduct)
     }
 
-    private fun buyProduct(activity: Activity, product: StoreProduct) {
-        Purchases.sharedInstance.purchase(
+    private fun purchaseProduct(activity: Activity, product: StoreProduct) {
+        Purchases.sharedInstance.purchaseWith(
             PurchaseParams.Builder(activity, product).build(),
-            object : PurchaseCallback {
-                override fun onError(error: PurchasesError, userCancelled: Boolean) {
-                    Log.e(TAG, "Code ${error.code}: ${error.message}")
-                    sendEvent(PurchaseEvent.PurchaseAborted)
-                }
-
-                override fun onCompleted(
-                    storeTransaction: StoreTransaction,
-                    customerInfo: CustomerInfo
-                ) {
-                    sendEvent(PurchaseEvent.PurchaseComplete)
-                }
-            })
+            onError = { error, _ ->
+                Log.e(TAG, "Code ${error.code}: ${error.message}")
+                sendEvent(PurchaseEvent.PurchaseAborted)
+            },
+            onSuccess = { _, _ ->
+                sendEvent(PurchaseEvent.PurchaseComplete)
+            }
+        )
     }
 
-    fun sendEvent(event: PurchaseEvent) {
+    private fun sendEvent(event: PurchaseEvent) {
         viewModelScope.launch {
             eventChannel.send(event)
         }
