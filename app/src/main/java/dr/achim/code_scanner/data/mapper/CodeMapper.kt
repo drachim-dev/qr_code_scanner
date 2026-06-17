@@ -31,6 +31,18 @@ fun Barcode.toModel(): Code {
                 )
             }
 
+            // otp
+            rawValue?.startsWith("otpauth://", ignoreCase = true) == true -> {
+                val uri = rawValue!!.toUri()
+                Code.Otp(
+                    id = id,
+                    rawValue = rawValue!!,
+                    displayValue = displayValue,
+                    label = uri.path?.removePrefix("/"),
+                    issuer = uri.getQueryParameter("issuer")
+                )
+            }
+
             valueType == Barcode.TYPE_PHONE -> {
                 val phoneNumber = phone?.number
                 if (phoneNumber != null) {
@@ -129,6 +141,18 @@ fun CodeEntity.toModel(): Code {
             Code.Esim(
                 id = id,
                 rawValue = rawValue,
+            )
+        }
+
+        // otp
+        rawValue?.startsWith("otpauth://", ignoreCase = true) == true -> {
+            val uri = rawValue.toUri()
+            Code.Otp(
+                id = id,
+                rawValue = rawValue,
+                displayValue = displayValue,
+                label = uri.path?.removePrefix("/"),
+                issuer = uri.getQueryParameter("issuer")
             )
         }
 
@@ -239,6 +263,10 @@ fun Code.toEntity(): CodeEntity {
 
         is Code.NotSupported -> baseEntity.copy(
             type = Barcode.TYPE_UNKNOWN,
+        )
+
+        is Code.Otp -> baseEntity.copy(
+            type = Barcode.TYPE_TEXT,
         )
 
         is Code.Passkey -> baseEntity.copy(

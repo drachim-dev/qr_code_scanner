@@ -33,6 +33,7 @@ class ActionHandler(
             when (this) {
                 is AssistAction.AddContact -> getAddContactIntent(name, phoneNumber, email)
                 is AssistAction.AddEsim -> getAddEsimIntent(activationCode)
+                is AssistAction.AddOtp -> getAddOtpIntent(uri)
                 is AssistAction.Call -> getDialIntent(phoneNumber)
                 is AssistAction.Connect -> getWifiIntent(ssid, password ?: "", encryptionType)
                 is AssistAction.Copy -> {
@@ -67,6 +68,10 @@ class ActionHandler(
         return Intent(Intent.ACTION_VIEW).apply {
             data = activationCode.toUri()
         }
+    }
+
+    private fun getAddOtpIntent(uri: Uri): Intent {
+        return Intent(Intent.ACTION_VIEW, uri)
     }
 
     private fun getAddContactIntent(name: String?, phoneNumber: String?, email: String?): Intent {

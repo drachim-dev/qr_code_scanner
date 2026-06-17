@@ -37,6 +37,11 @@ sealed class AssistAction(val icon: ImageVector) {
         override val label: Int = R.string.action_add_esim
     ) : AssistAction(Icons.Default.Add)
 
+    data class AddOtp(
+        val uri: Uri,
+        override val label: Int = R.string.action_add_otp
+    ) : AssistAction(Icons.Default.Add)
+
     data class Call(val phoneNumber: String) : AssistAction(Icons.Default.Call) {
         override val label = R.string.action_call_number
     }

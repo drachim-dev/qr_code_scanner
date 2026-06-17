@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.SimCardDownload
 import androidx.compose.material.icons.filled.Wifi
+import androidx.core.net.toUri
 import dr.achim.code_scanner.R
 import java.time.OffsetDateTime
 
@@ -64,6 +65,25 @@ sealed class Code : ContentType {
         override val actions = listOf(AssistAction.LaunchUrl(uri))
         override val rawContent = "${uri.host}${uri.path}".removePrefix("www.")
         override val icon = Icons.Default.Link
+    }
+
+    data class Otp(
+        override val id: String,
+        override val rawValue: String,
+        override val displayValue: String?,
+        val label: String?,
+        val issuer: String?,
+    ) : Code() {
+        override val actions = listOf(
+            AssistAction.AddOtp(rawValue.toUri()),
+            AssistAction.Copy(rawValue)
+        )
+        override val rawContent = label ?: issuer
+        override val additionalContent = buildString {
+            issuer?.let { append("Issuer: $it\n") }
+            append(rawValue)
+        }.trim()
+        override val icon = Icons.Default.Key
     }
 
     data class Text(
@@ -141,7 +161,7 @@ sealed class Code : ContentType {
 
     fun isSensitive(): Boolean {
         return when (this) {
-            is Passkey -> true
+            is Passkey, is Otp -> true
             else -> false
         }
     }

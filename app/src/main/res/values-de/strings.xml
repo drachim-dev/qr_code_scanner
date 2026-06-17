@@ -9,6 +9,7 @@
 
     <string name="action_add_contact">Kontakt hinzufügen</string>
     <string name="action_add_esim">E-SIM hinzufügen</string>
+    <string name="action_add_otp">Token hinzufügen</string>
     <string name="action_add_wifi">Wlan hinzufügen</string>
     <string name="action_call_number">Anrufen</string>
     <string name="action_copy_password">Passwort kopieren</string>
