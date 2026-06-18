@@ -74,7 +74,7 @@ fun HomeScreen(
     onClickAction: (AssistAction) -> Unit,
     onNavigateToHistory: () -> Unit,
     onNavigateToLibraries: () -> Unit,
-    currentScreen: Screen,
+    title: String,
 ) {
     val floatingDraggableItemState = rememberFloatingDraggableItemState()
     var showSupportMeDialog by remember { mutableStateOf(false) }
@@ -85,7 +85,7 @@ fun HomeScreen(
     Scaffold(
         topBar = {
             HomeScreenAppBar(
-                currentScreen = currentScreen,
+                title = title,
                 onNavigateToHistory = onNavigateToHistory,
                 autoStartCameraEnabled = autoStartCameraEnabled,
                 onAutoStartCameraChange = onAutoStartCameraChange,
@@ -154,7 +154,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeScreenAppBar(
-    currentScreen: Screen,
+    title: String,
     onNavigateToHistory: () -> Unit,
     autoStartCameraEnabled: Boolean,
     onAutoStartCameraChange: (Boolean) -> Unit,
@@ -164,7 +164,7 @@ private fun HomeScreenAppBar(
     var showMoreDialog by remember { mutableStateOf(false) }
 
     DefaultAppBar(
-        title = currentScreen.title,
+        title = title,
         navigateUp = null,
         actions = {
             IconButton(onClick = onNavigateToHistory) {
@@ -327,7 +327,7 @@ private fun EmptyPreview() {
             onClickAction = {},
             onNavigateToHistory = {},
             onNavigateToLibraries = {},
-            currentScreen = Screen.Home
+            title = Screen.Home.title
         )
     }
 }
@@ -345,7 +345,7 @@ private fun Preview(@PreviewParameter(CodeParameterProvider::class) code: Code) 
             onClickAction = {},
             onNavigateToHistory = {},
             onNavigateToLibraries = {},
-            currentScreen = Screen.Home
+            title = Screen.Home.title
         )
     }
 }

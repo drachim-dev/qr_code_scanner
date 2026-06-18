@@ -71,7 +71,7 @@ data class Category(val name: String, val items: List<Code>)
 
 @Composable
 fun HistoryScreen(
-    currentScreen: Screen,
+    title: String,
     navigateUp: NavigateUp?,
     viewState: HistoryScreenState,
     onClickAction: (AssistAction) -> Unit,
@@ -109,7 +109,7 @@ fun HistoryScreen(
                     )
                 } else {
                     HistoryTopAppBar(
-                        title = currentScreen.title,
+                        title = title,
                         navigateUp = navigateUp,
                         onChangeSelectionMode = onChangeSelectionMode,
                         clearHistoryEnabled = hasHistory,
@@ -449,7 +449,7 @@ private fun Preview() {
 
     AppTheme {
         HistoryScreen(
-            currentScreen = Screen.History,
+            title = Screen.History.title,
             navigateUp = {},
             viewState = HistoryScreenState.Success(
                 categories = categories,

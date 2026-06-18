@@ -35,7 +35,7 @@ import dr.achim.code_scanner.presentation.theme.AppTheme
 
 @Composable
 fun OnboardingScreen(
-    currentScreen: Screen,
+    title: String,
     autoStartCameraEnabled: Boolean,
     onAutoStartCameraChange: (Boolean) -> Unit,
     setHasSeenOnboarding: () -> Unit,
@@ -66,7 +66,7 @@ fun OnboardingScreen(
                 modifier = Modifier.padding(top = AppTheme.spacing.m)
             ) {
                 OnboardingHeader(
-                    title = currentScreen.title,
+                    title = title,
                     description = stringResource(R.string.screen_onboarding_subtitle)
                 )
 
@@ -150,7 +150,7 @@ fun OnboardingHeader(title: String, description: String) {
 private fun OnboardingScreenContentPreview() {
     AppTheme {
         OnboardingScreen(
-            currentScreen = Screen.Onboarding,
+            title = Screen.Onboarding.title,
             autoStartCameraEnabled = true,
             onAutoStartCameraChange = {},
             setHasSeenOnboarding = {},
