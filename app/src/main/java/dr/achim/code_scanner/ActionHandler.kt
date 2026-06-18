@@ -7,6 +7,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.net.wifi.WifiConfiguration
+import android.net.wifi.WifiManager
 import android.net.wifi.WifiNetworkSuggestion
 import android.os.Build
 import android.provider.ContactsContract
@@ -14,6 +16,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import com.google.mlkit.vision.barcode.common.Barcode
 import dr.achim.code_scanner.domain.model.AssistAction
@@ -35,7 +38,13 @@ class ActionHandler(
                 is AssistAction.AddEsim -> getAddEsimIntent(activationCode)
                 is AssistAction.AddOtp -> getAddOtpIntent(uri)
                 is AssistAction.Call -> getDialIntent(phoneNumber)
-                is AssistAction.Connect -> getWifiIntent(ssid, password ?: "", encryptionType)
+                is AssistAction.Connect -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                        getWifiAddNetworksIntent(ssid, password ?: "", encryptionType)
+                    } else {
+                        getWifiConnectLegacyIntent(ssid, password ?: "", encryptionType)
+                    }
+                }
                 is AssistAction.Copy -> {
                     copyToClipboard(content)
                     success = true
@@ -94,8 +103,8 @@ class ActionHandler(
         }
     }
 
-    private fun getWifiIntent(ssid: String, password: String, encryptionType: Int?): Intent? {
-
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun getWifiAddNetworksIntent(ssid: String, password: String, encryptionType: Int?): Intent? {
         val networkSuggestions = buildList {
             when (encryptionType) {
                 Barcode.WiFi.TYPE_WPA -> {
@@ -133,6 +142,41 @@ class ActionHandler(
                 ArrayList(networkSuggestions)
             )
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getWifiConnectLegacyIntent(ssid: String, password: String, encryptionType: Int?): Intent {
+        val wifiConfig = WifiConfiguration().apply {
+            SSID = "\"$ssid\""
+        }
+
+        when (encryptionType) {
+            Barcode.WiFi.TYPE_WPA -> {
+                wifiConfig.preSharedKey = "\"$password\""
+            }
+
+            Barcode.WiFi.TYPE_WEP -> {
+                wifiConfig.wepKeys[0] = "\"$password\""
+                wifiConfig.wepTxKeyIndex = 0
+                wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
+                wifiConfig.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40)
+            }
+
+            else -> {
+                wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE)
+            }
+        }
+
+        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val netId = wifiManager.addNetwork(wifiConfig)
+        if (netId != -1) {
+            wifiManager.disconnect()
+            wifiManager.enableNetwork(netId, true)
+            wifiManager.reconnect()
+        }
+
+        // Return intent to open WiFi settings so the user can see the connection progress/status
+        return Intent(Settings.ACTION_WIFI_SETTINGS)
     }
 
     private fun getDialIntent(phoneNumber: String): Intent {
