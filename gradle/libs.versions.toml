@@ -47,7 +47,6 @@ material = { group = "androidx.compose.material", name = "material-icons-extende
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
 androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
 play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "codeScanner" }
 revenuecat-purchases = { module = "com.revenuecat.purchases:purchases", version.ref = "revenueCat" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

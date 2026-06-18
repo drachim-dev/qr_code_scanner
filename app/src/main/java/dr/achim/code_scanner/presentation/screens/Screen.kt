@@ -21,8 +21,5 @@ sealed class Screen(@StringRes private val titleResId: Int) : NavKey {
     data object History : Screen(R.string.screen_history)
 
     @Serializable
-    data object HistoryDetail : Screen(R.string.screen_history)
-
-    @Serializable
     data object Libraries : Screen(R.string.screen_libraries)
 }
