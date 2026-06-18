@@ -30,7 +30,7 @@ android {
     defaultConfig {
         applicationId = "dr.achim.code_scanner"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = (project.findProperty("versionCode") as? String)?.toIntOrNull() ?: 1
         versionName = project.findProperty("versionName") as? String ?: "1.0"
 
