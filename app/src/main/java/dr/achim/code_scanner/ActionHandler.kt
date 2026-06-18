@@ -108,15 +108,10 @@ class ActionHandler(
         val networkSuggestions = buildList {
             when (encryptionType) {
                 Barcode.WiFi.TYPE_WPA -> {
+                    // wpa2 should work for routers with wpa3 (mixed mode) too
                     WifiNetworkSuggestion.Builder()
                         .setSsid(ssid)
                         .setWpa2Passphrase(password)
-                        .build()
-                        .also { add(it) }
-
-                    WifiNetworkSuggestion.Builder()
-                        .setSsid(ssid)
-                        .setWpa3Passphrase(password)
                         .build()
                         .also { add(it) }
                 }
