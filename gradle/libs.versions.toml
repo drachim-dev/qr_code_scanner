@@ -1,5 +1,5 @@
 [versions]
-aboutlibraries = "14.2.1"
+aboutlibraries = "15.0.0"
 activityCompose = "1.13.0"
 androidPlayReview = "2.0.2"
 androidxCore = "1.19.0"

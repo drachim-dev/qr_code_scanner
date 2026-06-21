@@ -17,7 +17,7 @@ object DefaultAppBar {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun colors(
-        containerColor: Color = Color.Transparent,
+        containerColor: Color = AppTheme.colorScheme.background,
         scrolledContainerColor: Color = Color.Unspecified,
         navigationIconContentColor: Color = Color.Unspecified,
         titleContentColor: Color = AppTheme.colorScheme.primary,
