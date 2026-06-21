@@ -39,19 +39,21 @@ android {
             useSupportLibrary = true
         }
 
-        val revenueCatKey = if (System.getenv("REVENUECAT_KEY") != null) {
-            System.getenv("REVENUECAT_KEY")
-        } else {
-            val localProperties = Properties().apply {
-                val localPropertiesFile = rootProject.file("local.properties")
-                if (localPropertiesFile.exists()) {
-                    load(FileInputStream(localPropertiesFile))
-                } else {
-                    println("Warning: local.properties file not found")
+        fun getProperty(name: String, default: String): String {
+            return if (System.getenv(name) != null) {
+                System.getenv(name)
+            } else {
+                val localProperties = Properties().apply {
+                    val localPropertiesFile = rootProject.file("local.properties")
+                    if (localPropertiesFile.exists()) {
+                        load(FileInputStream(localPropertiesFile))
+                    }
                 }
+                localProperties.getProperty(name, default)
             }
-            localProperties.getProperty("REVENUECAT_KEY", "")
         }
+
+        val revenueCatKey = getProperty("REVENUECAT_KEY", "")
         buildConfigField("String", "REVENUECAT_KEY", "\"${revenueCatKey}\"")
     }
 
@@ -85,6 +87,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            optimization { enable = true }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
