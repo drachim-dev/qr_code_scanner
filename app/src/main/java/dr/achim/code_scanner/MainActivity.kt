@@ -9,14 +9,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.EngagementSignalsCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import dagger.hilt.android.AndroidEntryPoint
 import dr.achim.code_scanner.domain.model.Code
 import dr.achim.code_scanner.presentation.navigation.AppNavigation
 import dr.achim.code_scanner.presentation.theme.AppTheme
 import dr.achim.code_scanner.service.InAppReviewService
 import dr.achim.code_scanner.service.customtab.CustomTabHelper
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity(), EngagementSignalsCallback {
 
     private val resultLauncher =

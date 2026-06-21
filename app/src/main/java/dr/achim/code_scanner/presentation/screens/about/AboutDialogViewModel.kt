@@ -10,7 +10,6 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.getProductsWith
 import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.purchaseWith
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dr.achim.code_scanner.common.Product
 import dr.achim.code_scanner.common.TAG
 import kotlinx.coroutines.channels.Channel
@@ -18,10 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class AboutDialogViewModel @Inject constructor() : ViewModel() {
+class AboutDialogViewModel : ViewModel() {
 
     private val _viewState = MutableStateFlow(AboutDialogState(true, emptyList(), ::purchaseProduct))
     val viewState = _viewState.asStateFlow()

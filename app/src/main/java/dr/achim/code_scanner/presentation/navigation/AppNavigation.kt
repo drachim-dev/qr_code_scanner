@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -23,12 +22,14 @@ import dr.achim.code_scanner.presentation.screens.home.ScanResultCallback
 import dr.achim.code_scanner.presentation.screens.libraries.LibrariesScreen
 import dr.achim.code_scanner.presentation.screens.onboarding.OnboardingScreen
 import dr.achim.code_scanner.presentation.screens.onboarding.OnboardingViewModel
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 typealias NavigateUp = () -> Unit
 
 @Composable
 fun AppNavigation(
-    navViewModel: AppNavigationViewModel = hiltViewModel(),
+    navViewModel: AppNavigationViewModel = koinViewModel(),
     onClickAction: (dr.achim.code_scanner.domain.model.AssistAction) -> Unit,
     onScanResult: ScanResultCallback,
 ) {
@@ -58,7 +59,7 @@ fun AppNavigation(
         },
         entryProvider = entryProvider {
             entry<Screen.Onboarding> {
-                val viewModel = hiltViewModel<OnboardingViewModel>()
+                val viewModel = koinViewModel<OnboardingViewModel>()
                 val autoStartCamera by viewModel.autoStartCameraState.collectAsStateWithLifecycle()
 
                 OnboardingScreen(
@@ -71,9 +72,9 @@ fun AppNavigation(
             }
 
             entry<Screen.Home> {
-                val viewModel = hiltViewModel<HomeViewModel, HomeViewModel.Factory> { factory ->
-                    factory.create(onScanResult)
-                }
+                val viewModel = koinViewModel<HomeViewModel>(
+                    parameters = { parametersOf(onScanResult) }
+                )
 
                 val viewState by viewModel.viewState.collectAsStateWithLifecycle()
                 val autoStartCamera by viewModel.autoStartCameraState.collectAsStateWithLifecycle()
@@ -93,7 +94,7 @@ fun AppNavigation(
             }
 
             entry<Screen.History> {
-                val viewModel = hiltViewModel<HistoryViewModel>()
+                val viewModel = koinViewModel<HistoryViewModel>()
                 val viewState by viewModel.viewState.collectAsStateWithLifecycle()
 
                 HistoryScreen(

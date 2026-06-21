@@ -8,11 +8,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
-
-class ImageStreamSourceImpl @Inject constructor(private val scanner: GmsBarcodeScanner) :
-    ImageStreamSource {
-
+class ImageStreamSourceImpl(private val scanner: GmsBarcodeScanner) : ImageStreamSource {
     override fun startScanning(): Flow<Code?> {
         return callbackFlow {
             scanner.startScan()

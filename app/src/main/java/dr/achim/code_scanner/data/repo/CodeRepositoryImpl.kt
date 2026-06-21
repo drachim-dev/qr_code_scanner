@@ -9,9 +9,7 @@ import dr.achim.code_scanner.domain.model.Code
 import dr.achim.code_scanner.domain.repo.CodeRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-
-class CodeRepositoryImpl @Inject constructor(
+class CodeRepositoryImpl(
     private val imageStreamSource: ImageStreamSource,
     private val codeDao: CodeDao
 ) : CodeRepository {

@@ -2,10 +2,6 @@ package dr.achim.code_scanner.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dr.achim.code_scanner.domain.model.Code
 import dr.achim.code_scanner.domain.usecase.autostartmode.GetAutoStartCamera
 import dr.achim.code_scanner.domain.usecase.autostartmode.SetAutoStartCamera
@@ -17,10 +13,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.annotation.InjectedParam
 
-@HiltViewModel(assistedFactory = HomeViewModel.Factory::class)
-class HomeViewModel @AssistedInject constructor(
-    @Assisted val onScanResultCallback: ScanResultCallback,
+class HomeViewModel(
+    @InjectedParam private val onScanResultCallback: ScanResultCallback,
     private val startScanningUseCase: StartScanning,
     private val getAutoStartCamera: GetAutoStartCamera,
     private val setAutoStartCameraUseCase: SetAutoStartCamera,
@@ -28,11 +24,6 @@ class HomeViewModel @AssistedInject constructor(
     private val setShowSupportHintUseCase: SetShowSupportHint,
     private val addCodeToHistory: AddCodeToHistory,
 ) : ViewModel() {
-
-    @AssistedFactory
-    interface Factory {
-        fun create(onScanResultCallback: ScanResultCallback): HomeViewModel
-    }
 
     private val _viewState = MutableStateFlow(buildViewState())
     val viewState = _viewState.asStateFlow()

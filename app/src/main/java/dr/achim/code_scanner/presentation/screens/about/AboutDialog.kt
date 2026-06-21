@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.core.net.toUri
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.revenuecat.purchases.models.StoreProduct
 import dr.achim.code_scanner.R
@@ -52,6 +51,7 @@ import dr.achim.code_scanner.common.Dimens
 import dr.achim.code_scanner.common.DynamicPreview
 import dr.achim.code_scanner.common.findActivity
 import dr.achim.code_scanner.presentation.theme.AppTheme
+import org.koin.androidx.compose.koinViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -71,7 +71,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun AboutDialog(
-    viewModel: AboutDialogViewModel = hiltViewModel(),
+    viewModel: AboutDialogViewModel = koinViewModel(),
     onDismissRequest: () -> Unit,
 ) {
     val viewState by viewModel.viewState.collectAsStateWithLifecycle()

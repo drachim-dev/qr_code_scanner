@@ -2,7 +2,6 @@ package dr.achim.code_scanner.presentation.screens.history
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import dr.achim.code_scanner.common.DateTimeFormat
 import dr.achim.code_scanner.common.DateTimeFormatter
 import dr.achim.code_scanner.common.formatWith
@@ -16,10 +15,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class HistoryViewModel @Inject constructor(
+class HistoryViewModel(
     getCodesFromHistory: GetCodesFromHistory,
     private val deleteCodesFromHistory: DeleteCodesFromHistory,
     private val deleteAllCodesFromHistory: DeleteAllCodesFromHistory,

@@ -5,8 +5,8 @@ plugins {
     alias(libs.plugins.aboutlibraries.plugin.android)
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.plugin)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.koin.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.secrets.gradle.plugin)
     kotlin("plugin.serialization").version(libs.versions.kotlin)
@@ -111,6 +111,7 @@ android {
 
 ksp {
     arg("room.schemaLocation", "$projectDir/schemas")
+    arg("KOIN_CONFIG_CHECK","true")
 }
 
 dependencies {
@@ -125,7 +126,9 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.hilt.navigation.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.annotations)
     implementation(libs.lifecycle.runtimeCompose)
     implementation(libs.lifecycle.viewModelCompose)
     implementation(libs.browser)
@@ -152,8 +155,4 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     ksp(libs.room.compiler)
-
-    // hilt
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 }

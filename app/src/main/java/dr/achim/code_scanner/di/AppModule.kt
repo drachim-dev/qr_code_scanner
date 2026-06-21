@@ -1,59 +1,29 @@
 package dr.achim.code_scanner.di
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.Room
-import com.google.mlkit.vision.barcode.common.Barcode
-import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
-import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import dr.achim.code_scanner.common.DateTimeFormatter
-import dr.achim.code_scanner.data.database.CodeDatabase
-import javax.inject.Singleton
+import dr.achim.code_scanner.presentation.navigation.AppNavigationViewModel
+import dr.achim.code_scanner.presentation.screens.about.AboutDialogViewModel
+import dr.achim.code_scanner.presentation.screens.history.HistoryViewModel
+import dr.achim.code_scanner.presentation.screens.home.HomeViewModel
+import dr.achim.code_scanner.presentation.screens.onboarding.OnboardingViewModel
+import org.koin.dsl.module
+import org.koin.plugin.module.dsl.create
+import org.koin.plugin.module.dsl.single
+import org.koin.plugin.module.dsl.viewModel
 
-@InstallIn(SingletonComponent::class)
-@Module
-object AppModule {
+val appModule = module {
+    single<SharedPreferences> { create(::provideSharedPreferences) }
 
-    @Provides
-    fun provideContext(application: Application): Context =
-        application.applicationContext
+    single<DateTimeFormatter>()
 
-    @Provides
-    fun providePrefs(@ApplicationContext context: Context): SharedPreferences =
-        context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-
-    @Provides
-    fun provideBarCodeOptions() =
-        GmsBarcodeScannerOptions.Builder()
-            .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
-            .enableAutoZoom()
-            .build()
-
-    @Provides
-    fun provideBarCodeScanner(
-        context: Context,
-        options: GmsBarcodeScannerOptions
-    ) = GmsBarcodeScanning.getClient(context, options)
-
-    @Provides
-    @Singleton
-    fun provideDatabase(app: Application): CodeDatabase {
-        return Room.databaseBuilder(
-            context = app,
-            klass = CodeDatabase::class.java,
-            name = "AppDatabase"
-        ).fallbackToDestructiveMigration(false).build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideDateFormatter(@ApplicationContext context: Context): DateTimeFormatter {
-        return DateTimeFormatter(context)
-    }
+    viewModel<AppNavigationViewModel>()
+    viewModel<AboutDialogViewModel>()
+    viewModel<HistoryViewModel>()
+    viewModel<HomeViewModel>()
+    viewModel<OnboardingViewModel>()
 }
+
+private fun provideSharedPreferences(context: Context): SharedPreferences =
+    context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)

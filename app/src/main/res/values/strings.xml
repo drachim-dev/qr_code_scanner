@@ -59,4 +59,5 @@
     <string name="screen_onboarding_launch_mode_manual_title">Manual</string>
     <string name="screen_onboarding_launch_mode_auto_text">App will launch in scan mode automatically.</string>
     <string name="screen_onboarding_launch_mode_manual_text">You need to press a button to start scanning.</string>
+    <string name="screen_onboarding_continue">Let\'s go!</string>
 </resources>

@@ -6,10 +6,9 @@ import dr.achim.code_scanner.R
 import java.time.OffsetDateTime
 import java.time.format.FormatStyle
 import java.util.Locale
-import javax.inject.Inject
 import java.time.format.DateTimeFormatter as JavaDateTimeFormatter
 
-class DateTimeFormatter @Inject constructor(private val context: Context) {
+class DateTimeFormatter(private val context: Context) {
     private val formatterCache = mutableMapOf<Pair<DateTimeFormat, Locale>, JavaDateTimeFormatter>()
 
     private fun getJavaDateTimeFormatter(

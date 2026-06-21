@@ -57,4 +57,5 @@
     <string name="screen_onboarding_launch_mode_manual_title">Manuell</string>
     <string name="screen_onboarding_launch_mode_auto_text">Die App wird direkt im Scannen-Modus gestartet.</string>
     <string name="screen_onboarding_launch_mode_manual_text">Der Scannen-Modus muss manuell über einen Button gestartet werden.</string>
+    <string name="screen_onboarding_continue">Los geht\'s!</string>
 </resources>

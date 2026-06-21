@@ -3,9 +3,7 @@ package dr.achim.code_scanner.data.source
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import dr.achim.code_scanner.common.PrefKeys
-import javax.inject.Inject
-
-class SettingsSourceImpl @Inject constructor(private val prefs: SharedPreferences) :
+class SettingsSourceImpl(private val prefs: SharedPreferences) :
     SettingsSource {
 
     override fun getHasSeenOnboarding(): Boolean {
