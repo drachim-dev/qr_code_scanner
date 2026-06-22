@@ -13,6 +13,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import dr.achim.code_scanner.domain.model.AssistAction
 import dr.achim.code_scanner.presentation.screens.Screen
 import dr.achim.code_scanner.presentation.screens.history.HistoryScreen
 import dr.achim.code_scanner.presentation.screens.history.HistoryViewModel
@@ -28,9 +29,9 @@ import org.koin.core.parameter.parametersOf
 typealias NavigateUp = () -> Unit
 
 @Composable
-fun AppNavigation(
-    navViewModel: AppNavigationViewModel = koinViewModel(),
-    onClickAction: (dr.achim.code_scanner.domain.model.AssistAction) -> Unit,
+fun Navigation(
+    navViewModel: NavigationViewModel = koinViewModel(),
+    onClickAction: (AssistAction) -> Unit,
     onScanResult: ScanResultCallback,
 ) {
     val hasSeenOnboarding by navViewModel.getHasSeenOnboardingState.collectAsStateWithLifecycle()
@@ -67,7 +68,10 @@ fun AppNavigation(
                     autoStartCameraEnabled = autoStartCamera,
                     onAutoStartCameraChange = viewModel::setAutoStartCamera,
                     setHasSeenOnboarding = viewModel::setHasSeenOnboarding,
-                    onNavigateToHome = { backStack += Screen.Home },
+                    onNavigateToHome = {
+                        backStack.clear()
+                        backStack += Screen.Home
+                    },
                 )
             }
 

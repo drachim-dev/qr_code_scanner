@@ -8,7 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.browser.customtabs.EngagementSignalsCallback
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import dr.achim.code_scanner.domain.model.Code
-import dr.achim.code_scanner.presentation.navigation.AppNavigation
+import dr.achim.code_scanner.presentation.navigation.Navigation
 import dr.achim.code_scanner.presentation.theme.AppTheme
 import dr.achim.code_scanner.service.InAppReviewService
 import dr.achim.code_scanner.service.customtab.CustomTabHelper
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity(), EngagementSignalsCallback {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                AppNavigation(
+                Navigation(
                     onClickAction = {
                         actionHandler.handleAction(
                             customTabHelper = customTabHelper,

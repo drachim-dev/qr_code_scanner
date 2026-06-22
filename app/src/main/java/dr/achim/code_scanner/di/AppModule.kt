@@ -3,7 +3,7 @@ package dr.achim.code_scanner.di
 import android.content.Context
 import android.content.SharedPreferences
 import dr.achim.code_scanner.common.DateTimeFormatter
-import dr.achim.code_scanner.presentation.navigation.AppNavigationViewModel
+import dr.achim.code_scanner.presentation.navigation.NavigationViewModel
 import dr.achim.code_scanner.presentation.screens.about.AboutDialogViewModel
 import dr.achim.code_scanner.presentation.screens.history.HistoryViewModel
 import dr.achim.code_scanner.presentation.screens.home.HomeViewModel
@@ -18,7 +18,7 @@ val appModule = module {
 
     single<DateTimeFormatter>()
 
-    viewModel<AppNavigationViewModel>()
+    viewModel<NavigationViewModel>()
     viewModel<AboutDialogViewModel>()
     viewModel<HistoryViewModel>()
     viewModel<HomeViewModel>()
