@@ -8,14 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,54 +50,46 @@ fun OnboardingScreen(
         autoStartCameraSelected = it
     }
 
-    Surface(color = AppTheme.colorScheme.background) {
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .safeContentPadding()
+                .padding(innerPadding)
                 .padding(AppTheme.spacing.m),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.l)
         ) {
+            OnboardingHeader(
+                title = title,
+                description = stringResource(R.string.screen_onboarding_subtitle)
+            )
 
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = AppTheme.spacing.m)
+                modifier = Modifier.fillMaxWidth(0.95f),
+                verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sm)
             ) {
-                OnboardingHeader(
-                    title = title,
-                    description = stringResource(R.string.screen_onboarding_subtitle)
+                CheckCard(
+                    title = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_auto_title)) },
+                    description = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_auto_text)) },
+                    checked = autoStartCameraSelected,
+                    onClick = { onAutoStartCameraSelected(true) }
                 )
 
-                Spacer(modifier = Modifier.height(AppTheme.spacing.l))
-
-                Column(
-                    modifier = Modifier.fillMaxWidth(0.95f),
-                    verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.sm)
-                ) {
-                    CheckCard(
-                        title = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_auto_title)) },
-                        description = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_auto_text)) },
-                        checked = autoStartCameraSelected,
-                        onClick = { onAutoStartCameraSelected(true) }
-                    )
-
-                    CheckCard(
-                        title = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_manual_title)) },
-                        description = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_manual_text)) },
-                        checked = !autoStartCameraSelected,
-                        onClick = { onAutoStartCameraSelected(false) }
-                    )
-                }
+                CheckCard(
+                    title = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_manual_title)) },
+                    description = { Text(text = stringResource(R.string.screen_onboarding_launch_mode_manual_text)) },
+                    checked = !autoStartCameraSelected,
+                    onClick = { onAutoStartCameraSelected(false) }
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = Dimens.buttonMinHeight),
+                    .defaultMinSize(minHeight = Dimens.buttonMinHeight)
+                    .fillMaxWidth(),
                 onClick = {
                     onAutoStartCameraChange(autoStartCameraSelected)
                     setHasSeenOnboarding()
